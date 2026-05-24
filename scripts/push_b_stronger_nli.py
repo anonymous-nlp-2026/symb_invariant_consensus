@@ -12,11 +12,11 @@ from scipy.stats import binomtest
 import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
-NLI_MODEL = "/root/autodl-tmp/models/deberta-v3-large-mnli-fever-anli-ling-wanli"
-PW_DATA = "/root/symb_invariant_consensus/data/proofwriter_full.json"
-QWEN3_TRACE_DIR = "/root/symb_invariant_consensus/results/exp033_qwen3_14b_pw600_nonthinking/intermediates"
-MISTRAL_VOTES_PATH = "/root/symb_invariant_consensus/data/mistral_pw600_sc_votes.json"
-OUTPUT_DIR = "/root/symb_invariant_consensus/results/push_b_stronger_nli_verifier"
+NLI_MODEL = "./models/deberta-v3-large-mnli-fever-anli-ling-wanli"
+PW_DATA = "./data/proofwriter_full.json"
+QWEN3_TRACE_DIR = "./results/exp033_qwen3_14b_pw600_nonthinking/intermediates"
+MISTRAL_VOTES_PATH = "./data/mistral_pw600_sc_votes.json"
+OUTPUT_DIR = "./results/push_b_stronger_nli_verifier"
 DEVICE = "cuda:0"
 CLASSES = ["True", "False", "Unknown"]
 WEIGHTS = [1, 3, 5]

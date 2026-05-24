@@ -104,7 +104,7 @@ def agreement_distribution(problems):
 
 # ---- Main ----
 taus = [0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
-base = "/root/symb_invariant_consensus/results"
+base = "./results"
 
 experiments = [
     ("exp033_mistral_7b_folio204", "Mistral-7B / FOLIO-204"),

@@ -8,9 +8,9 @@ from collections import Counter
 from scipy.stats import binomtest
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
-PW_PATH = "/root/symb_invariant_consensus/data/proofwriter_full.json"
-SC_PATH = "/root/symb_invariant_consensus/data/mistral_pw600_sc_votes.json"
-D116_PATH = "/root/symb_invariant_consensus/results/d116_qwen3_pw_deberta_large/results.json"
+PW_PATH = "./data/proofwriter_full.json"
+SC_PATH = "./data/mistral_pw600_sc_votes.json"
+D116_PATH = "./results/d116_qwen3_pw_deberta_large/results.json"
 CLASSES = ["True", "False", "Unknown"]
 WEIGHTS = [1, 3, 5]
 
@@ -20,8 +20,8 @@ ID_FIX = {
 }
 
 NLI_MODELS = {
-    "roberta": "/root/autodl-tmp/models/roberta-large-mnli",
-    "bart": "/root/autodl-tmp/models/bart-large-mnli",
+    "roberta": "./models/roberta-large-mnli",
+    "bart": "./models/bart-large-mnli",
 }
 
 def parse_problem(text):
@@ -310,7 +310,7 @@ def main():
         },
     }
 
-    out_path = "/root/symb_invariant_consensus/results/r11_3verifier_canonical.json"
+    out_path = "./results/r11_3verifier_canonical.json"
     with open(out_path, "w") as f:
         class NE(json.JSONEncoder):
             def default(self, o):

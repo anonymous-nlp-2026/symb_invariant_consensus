@@ -376,10 +376,10 @@ def run_adversarial(
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data-dir", default="/root/symb_invariant_consensus/results/exp033_mistral_7b_folio204/intermediates")
-    parser.add_argument("--output-dir", default="/root/symb_invariant_consensus/results/direction_h_adversarial")
+    parser.add_argument("--data-dir", default="./results/exp033_mistral_7b_folio204/intermediates")
+    parser.add_argument("--output-dir", default="./results/direction_h_adversarial")
     parser.add_argument("--port", type=int, default=8012)
-    parser.add_argument("--model", default="/root/autodl-tmp/models/Mistral-7B-Instruct-v0.3")
+    parser.add_argument("--model", default="./models/Mistral-7B-Instruct-v0.3")
     parser.add_argument("--temperature", type=float, default=0.3)
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--dry-run", action="store_true")

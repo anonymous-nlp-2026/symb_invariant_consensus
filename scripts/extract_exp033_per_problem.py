@@ -2,8 +2,8 @@ import json
 import math
 import os
 
-RESULTS_PATH = "/root/symb_invariant_consensus/results/exp033_mistral_7b_folio204/exp033_results.json"
-OUTPUT_PATH = "/root/symb_invariant_consensus/results/exp033_per_problem_analysis.json"
+RESULTS_PATH = "./results/exp033_mistral_7b_folio204/exp033_results.json"
+OUTPUT_PATH = "./results/exp033_per_problem_analysis.json"
 
 with open(RESULTS_PATH) as f:
     data = json.load(f)

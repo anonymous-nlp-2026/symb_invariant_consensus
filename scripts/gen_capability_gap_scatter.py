@@ -141,7 +141,7 @@ ax.legend(loc='lower right', framealpha=0.9, edgecolor='#cccccc',
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 
-outdir = '/root/symb_invariant_consensus/artifacts'
+outdir = './artifacts'
 fig.savefig(f'{outdir}/capability_gap_scatter.pdf')
 fig.savefig(f'{outdir}/capability_gap_scatter.png')
 print("Saved to", outdir)

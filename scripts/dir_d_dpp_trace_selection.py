@@ -10,9 +10,9 @@ from sklearn.metrics.pairwise import cosine_similarity
 from scipy.stats import binom
 from collections import Counter
 
-DATA_DIR = '/root/symb_invariant_consensus/results/exp033_mistral_7b_folio204/intermediates'
-GOLD_FILE = '/root/symb_invariant_consensus/data/folio_full.json'
-OUT_DIR = '/root/symb_invariant_consensus/results/dir_d_dpp_trace_selection'
+DATA_DIR = './results/exp033_mistral_7b_folio204/intermediates'
+GOLD_FILE = './data/folio_full.json'
+OUT_DIR = './results/dir_d_dpp_trace_selection'
 K_SELECT_VALUES = [4, 6, 8]
 
 

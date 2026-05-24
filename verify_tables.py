@@ -2,7 +2,7 @@ import json
 import os
 from pathlib import Path
 
-BASE = Path("/root/symb_invariant_consensus/results")
+BASE = Path("./results")
 
 def load_json(path):
     with open(path) as f:
@@ -315,7 +315,7 @@ if len(qwen_seeds) >= 4:
 
 # T1-12: Qwen2.5-7B FOLIO
 print("\n--- T1-12: Qwen2.5-7B × FOLIO ---")
-qwen7b_path = Path("/root/symb_invariant_consensus/experiments/exp-061-qwen7b-folio204")
+qwen7b_path = Path("./experiments/exp-061-qwen7b-folio204")
 print(f"  Experiment dir exists: {qwen7b_path.exists()}")
 print(f"  No results.json found in experiment dir (only logs)")
 # Check if results are in fleiss kappa or other files
@@ -571,8 +571,8 @@ print("=" * 100)
 print("\n--- Duplicate tab:main_results check ---")
 import subprocess
 # Check if both experiments.tex and diagnosis.tex define tab:main_results
-exp_path = Path("/root/symb_invariant_consensus/docs/paper/experiments.tex")
-diag_path = Path("/root/symb_invariant_consensus/docs/paper/diagnosis.tex")
+exp_path = Path("./docs/paper/experiments.tex")
+diag_path = Path("./docs/paper/diagnosis.tex")
 if exp_path.exists() and diag_path.exists():
     exp_has = "tab:main_results" in exp_path.read_text()
     diag_has = "tab:main_results" in diag_path.read_text()

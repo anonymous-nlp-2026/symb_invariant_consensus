@@ -5,7 +5,7 @@ import sys
 from collections import Counter
 from pathlib import Path
 
-RESULTS_DIR = Path("/root/symb_invariant_consensus/results")
+RESULTS_DIR = Path("./results")
 VALID_ANSWERS = {"True", "False", "Unknown"}
 
 MODELS = {

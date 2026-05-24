@@ -211,7 +211,7 @@ def analyze_random_weight(constraints_dir, intermediates_dir):
 # ============ MAIN ============
 
 if __name__ == "__main__":
-    base = "/root/symb_invariant_consensus/results"
+    base = "./results"
     
     print("=" * 70)
     print("CONSTRAINT ABLATION ANALYSIS")

@@ -15,7 +15,7 @@ from collections import Counter
 
 import requests
 
-sys.path.insert(0, '/root/symb_invariant_consensus')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from sica.z3_maxsat import (
     parse_z3_formula, ConstraintDeduplicator, MaxSATSolver,
     UniqueConstraint,
@@ -25,14 +25,14 @@ from sica.scorer import InvariantScorer
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
-RESULTS_DIR = Path('/root/symb_invariant_consensus/results/exp033_mistral_7b_folio204')
+RESULTS_DIR = Path('./results/exp033_mistral_7b_folio204')
 CACHE_DIR = RESULTS_DIR / 'constraint_cache'
 INTER_DIR = RESULTS_DIR / 'intermediates'
-FOLIO_PATH = Path('/root/symb_invariant_consensus/data/folio_full.json')
-OUT_DIR = Path('/root/symb_invariant_consensus/results/dir_f2_self_verification')
+FOLIO_PATH = Path('./data/folio_full.json')
+OUT_DIR = Path('./results/dir_f2_self_verification')
 
 VLLM_URL = "http://localhost:8012/v1/chat/completions"
-MODEL_PATH = "/root/autodl-tmp/models/Mistral-7B-Instruct-v0.3"
+MODEL_PATH = "./models/Mistral-7B-Instruct-v0.3"
 N = 30
 VERIFY_TEMPERATURE = 0.0
 VERIFY_MAX_TOKENS = 16

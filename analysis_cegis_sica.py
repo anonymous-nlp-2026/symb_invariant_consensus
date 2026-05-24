@@ -14,7 +14,7 @@ import logging
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-sys.path.insert(0, '/root/symb_invariant_consensus')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from sica.constraint_extractor import LOGIC_EXTRACTION_PROMPT
 from sica.z3_feedback import REFINEMENT_PROMPT
@@ -33,8 +33,8 @@ logger = logging.getLogger(__name__)
 logging.getLogger("httpx").setLevel(logging.WARNING)
 
 API_BASE = "http://localhost:8021/v1"
-EXP_DIR = "/root/symb_invariant_consensus/results/exp033_mistral_7b_folio204"
-OUTPUT_DIR = "/root/symb_invariant_consensus/results/direction_d_cegis"
+EXP_DIR = "./results/exp033_mistral_7b_folio204"
+OUTPUT_DIR = "./results/direction_d_cegis"
 MAX_ROUNDS = 3
 T_EXTRACT = 0.1
 T_REFINE = 0.3

@@ -1,6 +1,6 @@
 import json, os, glob
 
-DIR = "/root/symb_invariant_consensus/results/direction_d_cegis"
+DIR = "./results/direction_d_cegis"
 files = sorted(glob.glob(os.path.join(DIR, "folio_*.json")), key=lambda f: int(os.path.basename(f).split("_")[1].split(".")[0]))
 
 results = []

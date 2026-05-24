@@ -17,13 +17,13 @@ ID_FIX = {
     "ProofWriter_AttNoneg-OWA-D5-1284_Q8": "ProofWriter_AttNoneg-OWA-D5-1284_Q4",
 }
 
-with open("/root/symb_invariant_consensus/data/proofwriter_full.json") as f:
+with open("./data/proofwriter_full.json") as f:
     pw_data = json.load(f)
-with open("/root/symb_invariant_consensus/data/mistral_pw600_sc_votes.json") as f:
+with open("./data/mistral_pw600_sc_votes.json") as f:
     sc_votes_raw = json.load(f)
-with open("/root/symb_invariant_consensus/results/deberta_ft_combo_all_fixed/results.json") as f:
+with open("./results/deberta_ft_combo_all_fixed/results.json") as f:
     ft_results = json.load(f)
-with open("/root/symb_invariant_consensus/results/r11_3verifier_canonical.json") as f:
+with open("./results/r11_3verifier_canonical.json") as f:
     r11 = json.load(f)
 
 gt = {q["id"]: q["answer"] for q in pw_data}

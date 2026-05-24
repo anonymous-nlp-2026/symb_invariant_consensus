@@ -9,7 +9,7 @@ import glob
 import numpy as np
 from collections import defaultdict
 
-BASE = "/root/symb_invariant_consensus"
+BASE = os.path.dirname(os.path.abspath(__file__))
 EXP033_DIR = os.path.join(BASE, "results/exp033_mistral_7b_folio204")
 EXP031_FILE = os.path.join(BASE, "results/oracle_folio_regen/exp031_results.json")
 OUTPUT_FILE = os.path.join(BASE, "results/extraction_error_taxonomy.json")

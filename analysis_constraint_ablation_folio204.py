@@ -17,15 +17,15 @@ import argparse
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-sys.path.insert(0, "/root/symb_invariant_consensus")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 random.seed(42)
 
-INTERMEDIATES_DIR = "/root/symb_invariant_consensus/results/folio_204_14b/intermediates"
-RESULTS_FILE = "/root/symb_invariant_consensus/results/folio_204_14b/folio_204_results.json"
-CONSTRAINTS_DIR = "/root/symb_invariant_consensus/results/folio_204_14b/per_trace_constraints"
-K_ABLATION_DIR = "/root/autodl-tmp/sica_project/results/k_ablation_folio204"
-CONSTRAINT_ABLATION_DIR = "/root/autodl-tmp/sica_project/results/constraint_ablation_folio204"
+INTERMEDIATES_DIR = "./results/folio_204_14b/intermediates"
+RESULTS_FILE = "./results/folio_204_14b/folio_204_results.json"
+CONSTRAINTS_DIR = "./results/folio_204_14b/per_trace_constraints"
+K_ABLATION_DIR = "./results/k_ablation_folio204"
+CONSTRAINT_ABLATION_DIR = "./results/constraint_ablation_folio204"
 
 API_BASE = "http://localhost:8001/v1"
 

@@ -6,13 +6,13 @@ Usage:
     python scripts/eval_finetuned_nli.py \
         --model-path checkpoints/deberta-large-pw-finetuned/best
     python scripts/eval_finetuned_nli.py \
-        --model-path /root/autodl-tmp/models/deberta-large-mnli \
+        --model-path ./models/deberta-large-mnli \
         --sc-sources llama8b qwen14b mistral
 """
 
-# Environment setup for westd-16639:
+# Environment setup for server-A:
 #   export CUDA_VISIBLE_DEVICES=<free_gpu_id>
-#   export LD_LIBRARY_PATH=/root/miniconda3/lib/python3.12/site-packages/nvidia/cu13/lib:$LD_LIBRARY_PATH
+#   export LD_LIBRARY_PATH=/path/to/cuda/lib:$LD_LIBRARY_PATH
 
 
 import argparse
@@ -25,8 +25,8 @@ import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from scipy.stats import binomtest
 
-PW_DATA_PATH = "/root/symb_invariant_consensus/data/proofwriter_full.json"
-RESULTS_DIR = "/root/symb_invariant_consensus/results"
+PW_DATA_PATH = "./data/proofwriter_full.json"
+RESULTS_DIR = "./results"
 CLASSES = sorted(["True", "False", "Unknown"])
 WEIGHTS = [1, 3, 5]
 
@@ -42,7 +42,7 @@ SC_SOURCES = {
         "format": "results_list",
     },
     "mistral": {
-        "path": "/root/symb_invariant_consensus/data/mistral_pw600_sc_votes.json",
+        "path": "./data/mistral_pw600_sc_votes.json",
         "name": "Mistral-7B-Instruct-v0.3",
         "format": "vote_dict",
     },

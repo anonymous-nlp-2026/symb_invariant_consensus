@@ -2,20 +2,20 @@ import json, os, glob, statistics
 
 CONDITIONS = [
     {"label": "Qwen2.5-14B / FOLIO", "model": "Qwen2.5-14B", "domain": "FOLIO",
-     "path": "/root/symb_invariant_consensus/results/exp036_qwen25_14b_folio204/intermediates/"},
+     "path": "./results/exp036_qwen25_14b_folio204/intermediates/"},
     {"label": "LLaMA-3.1-8B / FOLIO", "model": "LLaMA-3.1-8B", "domain": "FOLIO",
-     "path": "/root/symb_invariant_consensus/results/exp-063-llama8b-folio204-16639/intermediates/"},
+     "path": "./results/exp-063-llama8b-folio204-16639/intermediates/"},
     {"label": "Qwen2.5-14B / PW", "model": "Qwen2.5-14B", "domain": "ProofWriter",
-     "path": "/root/symb_invariant_consensus/results/exp032_qwen25_14b_pw600/intermediates/"},
+     "path": "./results/exp032_qwen25_14b_pw600/intermediates/"},
     {"label": "LLaMA-3.1-8B / PW", "model": "LLaMA-3.1-8B", "domain": "ProofWriter",
-     "path": "/root/symb_invariant_consensus/results/exp048_llama8b_pw600/intermediates/"},
+     "path": "./results/exp048_llama8b_pw600/intermediates/"},
     {"label": "Qwen3-14B / FOLIO", "model": "Qwen3-14B", "domain": "FOLIO",
-     "path": "/root/symb_invariant_consensus/results/exp028b_qwen3_thinking_folio204/intermediates/"},
+     "path": "./results/exp028b_qwen3_thinking_folio204/intermediates/"},
     {"label": "DeepSeek-R1-8B / FOLIO", "model": "DeepSeek-R1-8B", "domain": "FOLIO",
-     "path": "/root/symb_invariant_consensus/results/exp064_deepseek_r1_qwen3_8b_folio204/intermediates/"},
+     "path": "./results/exp064_deepseek_r1_qwen3_8b_folio204/intermediates/"},
 ]
 
-out_dir = "/root/symb_invariant_consensus/results/r8_w3_dedup_statistics"
+out_dir = "./results/r8_w3_dedup_statistics"
 os.makedirs(out_dir, exist_ok=True)
 
 results = []

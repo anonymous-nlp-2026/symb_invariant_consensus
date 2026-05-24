@@ -131,6 +131,6 @@ output = {
     ],
     "pairs": [{"name": p[0], "cil": p[1], "combo_gain": p[2]} for p in pairs],
 }
-with open("/root/symb_invariant_consensus/results/cil_bootstrap_loo.json", "w") as f:
+with open("./results/cil_bootstrap_loo.json", "w") as f:
     json.dump(output, f, indent=2)
-print(f"\nSaved to /root/symb_invariant_consensus/results/cil_bootstrap_loo.json")
+print(f"\nSaved to ./results/cil_bootstrap_loo.json")

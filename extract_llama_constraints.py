@@ -4,7 +4,7 @@ import json, os, sys, time, re
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import httpx
 
-sys.path.insert(0, '/root/symb_invariant_consensus')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from sica.constraint_extractor import LOGIC_EXTRACTION_PROMPT
 
 SERVERS = [
@@ -25,8 +25,8 @@ for base in SERVERS:
         MODEL_IDS.append(None)
         print(f'{base}: FAILED - {e}')
 
-INTERMEDIATES_DIR = '/root/symb_invariant_consensus/results/exp-063-llama8b-folio204-16639/intermediates'
-OUTPUT_FILE = '/root/symb_invariant_consensus/results/exp-063-llama8b-folio204-16639/llama_constraints_t0t3.json'
+INTERMEDIATES_DIR = './results/exp-063-llama8b-folio204-16639/intermediates'
+OUTPUT_FILE = './results/exp-063-llama8b-folio204-16639/llama_constraints_t0t3.json'
 TRACES_TO_EXTRACT = [0, 1, 2, 3]
 
 def normalize(ans):

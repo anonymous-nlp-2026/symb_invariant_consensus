@@ -6,7 +6,7 @@ from collections import Counter
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-RESULTS_DIR = "/root/symb_invariant_consensus/results/exp_r1_distill_8b_sica"
+RESULTS_DIR = "./results/exp_r1_distill_8b_sica"
 
 def load_results():
     with open(os.path.join(RESULTS_DIR, "results.json")) as f:

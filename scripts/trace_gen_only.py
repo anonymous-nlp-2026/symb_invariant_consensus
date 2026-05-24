@@ -5,7 +5,7 @@ Saves intermediates in same format as run_full_mvp.py for cross_model_extract.py
 import json, os, sys, time, logging, glob
 from collections import Counter
 
-sys.path.insert(0, '/root/symb_invariant_consensus')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from sica.trace_generator import VLLMGenerator, extract_boxed_answer
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s",

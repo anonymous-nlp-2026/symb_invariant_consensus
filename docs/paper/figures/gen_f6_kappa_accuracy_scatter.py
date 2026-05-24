@@ -105,7 +105,7 @@ fig.text(0.5, -0.02,
          r"Note: ICG $\kappa$ measured on per-constraint-set MAX-SAT answers; others use direct trace answers.",
          ha='center', va='top', fontsize=7, color='#666666', fontstyle='italic')
 
-out_dir = '/home/ubuntu/.agent-ml-research-idea_gen_0513_3/projects/symb_invariant_consensus/docs/paper/figures'
+out_dir = './docs/paper/figures'
 fig.savefig(f'{out_dir}/f6_kappa_accuracy_scatter.pdf')
 fig.savefig(f'{out_dir}/f6_kappa_accuracy_scatter.png')
 print('Saved PDF and PNG.')

@@ -4,7 +4,7 @@ from collections import Counter
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-BASE = "/root/symb_invariant_consensus/results/exp_d135_frontier_scb/google_gemini-2.5-pro"
+BASE = "./results/exp_d135_frontier_scb/google_gemini-2.5-pro"
 INTERMEDIATES_DIR = os.path.join(BASE, "intermediates")
 CROSS_MODEL_RESULTS = os.path.join(BASE, "cross_model/cross_model_mistral.json")
 
@@ -191,7 +191,7 @@ def main():
         "model": "google_gemini-2.5-pro",
         "dataset": "FOLIO-95 (interim)",
         "n_questions": sc_total,
-        "extraction_model": cross.get("summary", {}).get("extraction_model", "/root/autodl-tmp/models/Mistral-7B-Instruct-v0.3"),
+        "extraction_model": cross.get("summary", {}).get("extraction_model", "./models/Mistral-7B-Instruct-v0.3"),
         "sc_accuracy": round(sc_acc, 4),
         "sica_accuracy": round(sica["sica_acc"], 4),
         "delta_pp": round(delta, 2),

@@ -4,40 +4,40 @@ from pathlib import Path
 
 EXPERIMENTS = [
     {"exp_id": "exp-033", "label": "Mistral-7B FOLIO-204 seed=42 T=0.7 K=12",
-     "path": "/root/symb_invariant_consensus/results/exp033_mistral_7b_folio204/exp033_results.json",
+     "path": "./results/exp033_mistral_7b_folio204/exp033_results.json",
      "old_sc": 54.41, "model": "Mistral-7B", "dataset": "FOLIO-204"},
     {"exp_id": "exp-057", "label": "Mistral-7B FOLIO-204 T=0.3",
-     "path": "/root/symb_invariant_consensus/results/exp057_mistral_folio204_t03/exp057_results.json",
+     "path": "./results/exp057_mistral_folio204_t03/exp057_results.json",
      "old_sc": 57.35, "model": "Mistral-7B", "dataset": "FOLIO-204"},
     {"exp_id": "exp-058", "label": "Mistral-7B FOLIO-204 T=0.5",
-     "path": "/root/symb_invariant_consensus/results/exp058_mistral_folio204_t05/exp058_results.json",
+     "path": "./results/exp058_mistral_folio204_t05/exp058_results.json",
      "old_sc": 57.84, "model": "Mistral-7B", "dataset": "FOLIO-204"},
     {"exp_id": "exp-054", "label": "Mistral-7B FOLIO-204 T=1.0",
-     "path": "/root/symb_invariant_consensus/results/exp054_mistral_folio204_t10/exp054_results.json",
+     "path": "./results/exp054_mistral_folio204_t10/exp054_results.json",
      "old_sc": 55.39, "model": "Mistral-7B", "dataset": "FOLIO-204"},
     {"exp_id": "exp-051-k4", "label": "Mistral-7B FOLIO-204 K=4",
-     "path": "/root/symb_invariant_consensus/results/exp051_mistral_k_sensitivity/k4/results.json",
+     "path": "./results/exp051_mistral_k_sensitivity/k4/results.json",
      "old_sc": 54.41, "model": "Mistral-7B", "dataset": "FOLIO-204"},
     {"exp_id": "exp-051-k8", "label": "Mistral-7B FOLIO-204 K=8",
-     "path": "/root/symb_invariant_consensus/results/exp051_mistral_k_sensitivity/k8/results.json",
+     "path": "./results/exp051_mistral_k_sensitivity/k8/results.json",
      "old_sc": 57.35, "model": "Mistral-7B", "dataset": "FOLIO-204"},
     {"exp_id": "exp-051-k16", "label": "Mistral-7B FOLIO-204 K=16",
-     "path": "/root/symb_invariant_consensus/results/exp051_mistral_k_sensitivity/k16/results.json",
+     "path": "./results/exp051_mistral_k_sensitivity/k16/results.json",
      "old_sc": 55.88, "model": "Mistral-7B", "dataset": "FOLIO-204"},
     {"exp_id": "exp-051-k20", "label": "Mistral-7B FOLIO-204 K=20",
-     "path": "/root/symb_invariant_consensus/results/exp051_mistral_k_sensitivity/k20/results.json",
+     "path": "./results/exp051_mistral_k_sensitivity/k20/results.json",
      "old_sc": 57.35, "model": "Mistral-7B", "dataset": "FOLIO-204"},
     {"exp_id": "exp-026", "label": "Qwen2.5-14B FOLIO-204",
-     "path": "/root/symb_invariant_consensus/results/folio_204_14b/folio_204_results.json",
+     "path": "./results/folio_204_14b/folio_204_results.json",
      "old_sc": 75.00, "model": "Qwen2.5-14B", "dataset": "FOLIO-204"},
     {"exp_id": "exp-027", "label": "Qwen3-14B FOLIO-204",
-     "path": "/root/symb_invariant_consensus/results/exp027_qwen3_14b_nonthinking/exp027_results.json",
+     "path": "./results/exp027_qwen3_14b_nonthinking/exp027_results.json",
      "old_sc": 80.39, "model": "Qwen3-14B", "dataset": "FOLIO-204"},
     {"exp_id": "exp-046", "label": "Mistral-7B PW-600",
-     "path": "/root/symb_invariant_consensus/results/exp046_mistral_7b_pw600/exp046_results.json",
+     "path": "./results/exp046_mistral_7b_pw600/exp046_results.json",
      "old_sc": 39.33, "model": "Mistral-7B", "dataset": "PW-600"},
     {"exp_id": "exp-034", "label": "Qwen2.5-14B PW-600 (25068, incomplete n=93)",
-     "path": "/root/symb_invariant_consensus/results/exp034_qwen25_14b_proofwriter/exp034_results.json",
+     "path": "./results/exp034_qwen25_14b_proofwriter/exp034_results.json",
      "old_sc": 70.33, "model": "Qwen2.5-14B", "dataset": "PW-600"},
 ]
 
@@ -129,7 +129,7 @@ def process_experiment(exp_info):
 
 def main():
     print("=" * 100)
-    print("SC TIEBREAKING REVALIDATION (westd-25068)")
+    print("SC TIEBREAKING REVALIDATION (server-B)")
     print("=" * 100)
 
     all_results = []
@@ -201,7 +201,7 @@ def main():
         if r["affected"]:
             output["details"][r["exp_id"]] = r["affected"]
 
-    out_path = Path("/root/symb_invariant_consensus/results/sc_tiebreak_revalidation_25068.json")
+    out_path = Path("./results/sc_tiebreak_revalidation_25068.json")
     with open(out_path, "w") as f:
         json.dump(output, f, indent=2)
     print(f"\nJSON saved to: {out_path}")

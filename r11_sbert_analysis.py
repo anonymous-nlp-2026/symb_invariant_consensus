@@ -4,9 +4,9 @@ from sentence_transformers import SentenceTransformer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-DATA_DIR = "/root/symb_invariant_consensus/results/exp033_mistral_7b_folio204/intermediates"
-ANSWER_MATRIX = "/root/symb_invariant_consensus/results/exp033_mistral_7b_folio204/sc_answer_matrix.json"
-MODEL_PATH = "/root/autodl-tmp/sbert_model"
+DATA_DIR = "./results/exp033_mistral_7b_folio204/intermediates"
+ANSWER_MATRIX = "./results/exp033_mistral_7b_folio204/sc_answer_matrix.json"
+MODEL_PATH = "./models/sbert_model"
 
 print("Loading SBERT model from local path...", flush=True)
 sbert_model = SentenceTransformer(MODEL_PATH)
@@ -118,7 +118,7 @@ result = {
     "conclusion": f"SBERT similarity ({mean_sbert:.2f}) also >> answer kappa ({fk:.2f}), confirming that process-level consensus is robust across embedding methods"
 }
 
-out_path = "/root/symb_invariant_consensus/r11_sbert_process_kappa.json"
+out_path = "./r11_sbert_process_kappa.json"
 with open(out_path, "w") as f:
     json.dump(result, f, indent=2)
 print(f"\nSaved to {out_path}", flush=True)

@@ -6,26 +6,26 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from scipy.stats import binomtest
 from collections import Counter
 
-FOLIO_DATA = "/root/symb_invariant_consensus/data/folio_full.json"
-DEBERTA_PATH = "/root/autodl-tmp/models/deberta-large-mnli"
+FOLIO_DATA = "./data/folio_full.json"
+DEBERTA_PATH = "./models/deberta-large-mnli"
 CLASSES = sorted(["True", "False", "Unknown"])
 WEIGHTS = [1, 3, 5]
 
 FOLIO_TRACES = {
     "mistral": {
-        "path": "/root/symb_invariant_consensus/results/exp033_mistral_7b_folio204/exp033_results.json",
+        "path": "./results/exp033_mistral_7b_folio204/exp033_results.json",
         "name": "Mistral-7B",
     },
     "llama8b": {
-        "path": "/root/symb_invariant_consensus/results/exp-063-llama8b-folio204-16639/results.json",
+        "path": "./results/exp-063-llama8b-folio204-16639/results.json",
         "name": "LLaMA-3.1-8B",
     },
     "qwen14b": {
-        "path": "/root/symb_invariant_consensus/results/exp036_qwen25_14b_folio204/results.json",
+        "path": "./results/exp036_qwen25_14b_folio204/results.json",
         "name": "Qwen2.5-14B",
     },
     "qwen3": {
-        "path": "/root/symb_invariant_consensus/results/exp_folio_2x2_qwen3/results.json",
+        "path": "./results/exp_folio_2x2_qwen3/results.json",
         "name": "Qwen3-14B",
     },
 }
@@ -205,7 +205,7 @@ def main():
         
         print(f"{info['name']:<20} {sc_acc*100:>10.2f} {nli_correct/n_nli*100:>10.2f} {w1['accuracy']*100:>10.2f} {w1['delta_pp']:>+8.2f} {w1['mcnemar_p']:>10.4f} {w3['accuracy']*100:>10.2f} {w3['delta_pp']:>+8.2f} {w3['mcnemar_p']:>10.4f} {w5['accuracy']*100:>10.2f} {w5['delta_pp']:>+8.2f} {w5['mcnemar_p']:>10.4f}")
 
-    output_path = "/root/symb_invariant_consensus/results/folio_zeroshot_nli_combo_d061.json"
+    output_path = "./results/folio_zeroshot_nli_combo_d061.json"
     with open(output_path, "w") as f:
         json.dump(all_results, f, indent=2)
     print(f"\nSaved to {output_path}")

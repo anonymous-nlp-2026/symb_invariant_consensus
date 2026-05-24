@@ -10,9 +10,9 @@ import os
 from collections import Counter
 from scipy.stats import binomtest
 
-EXP048_PATH = "/root/symb_invariant_consensus/results/exp048_llama8b_pw600/exp048_results.json"
-D116_PATH = "/root/symb_invariant_consensus/results/d116_qwen3_pw_deberta_large/results.json"
-OUTPUT_DIR = "/root/symb_invariant_consensus/results/exp092_llama8b_pw_nli_combo"
+EXP048_PATH = "./results/exp048_llama8b_pw600/exp048_results.json"
+D116_PATH = "./results/d116_qwen3_pw_deberta_large/results.json"
+OUTPUT_DIR = "./results/exp092_llama8b_pw_nli_combo"
 CLASSES = ["True", "False", "Unknown"]
 WEIGHTS = [1, 3, 5]
 

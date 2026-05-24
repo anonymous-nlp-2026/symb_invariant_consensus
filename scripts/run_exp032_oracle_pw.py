@@ -15,8 +15,8 @@ from pathlib import Path
 
 import z3
 
-INTERMEDIATES_DIR = Path("/root/symb_invariant_consensus/results/exp032_qwen25_14b_pw600/intermediates")
-OUTPUT_DIR = Path("/root/symb_invariant_consensus/results/exp032_qwen14b_pw_oracle")
+INTERMEDIATES_DIR = Path("./results/exp032_qwen25_14b_pw600/intermediates")
+OUTPUT_DIR = Path("./results/exp032_qwen14b_pw_oracle")
 
 
 class DSLParseError(Exception):

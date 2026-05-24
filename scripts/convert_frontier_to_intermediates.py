@@ -2,7 +2,7 @@
 import json, os, sys
 
 FRONTIER_RESULTS = sys.argv[1]  # e.g. results/exp_d135_frontier_scb/gpt-4.1/results.json
-FOLIO_DATA = "/root/symb_invariant_consensus/data/folio_full.json"
+FOLIO_DATA = "./data/folio_full.json"
 OUTPUT_DIR = sys.argv[2]  # e.g. results/exp_d135_frontier_scb/gpt-4.1/intermediates
 
 with open(FOLIO_DATA) as f:

@@ -310,7 +310,7 @@ def cross_model_comparison(mistral_data, qwen_data, mistral_problems, qwen_probl
 
 
 # Main
-base = "/root/symb_invariant_consensus/results"
+base = "./results"
 
 mistral_summary, mistral_problems = load_experiment(
     os.path.join(base, "exp033_mistral_7b_folio204"),

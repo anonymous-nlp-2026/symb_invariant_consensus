@@ -3,7 +3,7 @@ import json, os, sys, time, re
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import httpx
 
-sys.path.insert(0, '/root/symb_invariant_consensus')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from sica.constraint_extractor import LOGIC_EXTRACTION_PROMPT
 
 SERVERS = [
@@ -18,9 +18,9 @@ for i, (base, _) in enumerate(SERVERS):
     SERVERS[i] = (base, mid)
     print(f'Server {i}: {base} model={mid}', flush=True)
 
-INTERMEDIATES_DIR = '/root/symb_invariant_consensus/results/folio_204_14b/intermediates'
-CONSTRAINTS_DIR = '/root/symb_invariant_consensus/results/folio_204_14b/per_trace_constraints'
-RESULTS_FILE = '/root/symb_invariant_consensus/results/folio_204_14b/folio_204_results.json'
+INTERMEDIATES_DIR = './results/folio_204_14b/intermediates'
+CONSTRAINTS_DIR = './results/folio_204_14b/per_trace_constraints'
+RESULTS_FILE = './results/folio_204_14b/folio_204_results.json'
 os.makedirs(CONSTRAINTS_DIR, exist_ok=True)
 
 def normalize(ans):

@@ -8,9 +8,9 @@ import numpy as np
 from scipy import stats
 from collections import Counter
 
-EXP033_RESULTS = '/root/symb_invariant_consensus/results/exp033_mistral_7b_folio204/exp033_results.json'
-DECOUPLING_DIR = '/root/symb_invariant_consensus/results/direction_g_decoupling'
-OUTPUT_DIR = '/root/symb_invariant_consensus/results/exp_d134_baf_decoupled'
+EXP033_RESULTS = './results/exp033_mistral_7b_folio204/exp033_results.json'
+DECOUPLING_DIR = './results/direction_g_decoupling'
+OUTPUT_DIR = './results/exp_d134_baf_decoupled'
 
 STRATEGIES = ['conservative', 'standard', 'aggressive']
 

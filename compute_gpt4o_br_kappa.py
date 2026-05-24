@@ -7,7 +7,7 @@ from collections import Counter
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-RESULTS_DIR = "/root/symb_invariant_consensus/results/e6_gpt4o_folio204"
+RESULTS_DIR = "./results/e6_gpt4o_folio204"
 
 def load_results():
     with open(os.path.join(RESULTS_DIR, "results.json")) as f:

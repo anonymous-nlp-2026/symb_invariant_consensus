@@ -96,32 +96,32 @@ def compute_mcnemar(exp_info):
 
 EXPERIMENTS_25068 = [
     {"exp_id": "exp-033", "label": "Mistral-7B FOLIO-204 seed=42",
-     "path": "/root/symb_invariant_consensus/results/exp033_mistral_7b_folio204/exp033_results.json"},
+     "path": "./results/exp033_mistral_7b_folio204/exp033_results.json"},
     {"exp_id": "exp-057", "label": "Mistral-7B FOLIO-204 T=0.3",
-     "path": "/root/symb_invariant_consensus/results/exp057_mistral_folio204_t03/exp057_results.json"},
+     "path": "./results/exp057_mistral_folio204_t03/exp057_results.json"},
     {"exp_id": "exp-058", "label": "Mistral-7B FOLIO-204 T=0.5",
-     "path": "/root/symb_invariant_consensus/results/exp058_mistral_folio204_t05/exp058_results.json"},
+     "path": "./results/exp058_mistral_folio204_t05/exp058_results.json"},
     {"exp_id": "exp-054", "label": "Mistral-7B FOLIO-204 T=1.0",
-     "path": "/root/symb_invariant_consensus/results/exp054_mistral_folio204_t10/exp054_results.json"},
+     "path": "./results/exp054_mistral_folio204_t10/exp054_results.json"},
     {"exp_id": "exp-051-k8", "label": "Mistral-7B FOLIO-204 K=8",
-     "path": "/root/symb_invariant_consensus/results/exp051_mistral_k_sensitivity/k8/results.json"},
+     "path": "./results/exp051_mistral_k_sensitivity/k8/results.json"},
     {"exp_id": "exp-026", "label": "Qwen2.5-14B FOLIO-204",
-     "path": "/root/symb_invariant_consensus/results/folio_204_14b/folio_204_results.json"},
+     "path": "./results/folio_204_14b/folio_204_results.json"},
     {"exp_id": "exp-027", "label": "Qwen3-14B FOLIO-204",
-     "path": "/root/symb_invariant_consensus/results/exp027_qwen3_14b_nonthinking/exp027_results.json"},
+     "path": "./results/exp027_qwen3_14b_nonthinking/exp027_results.json"},
     {"exp_id": "exp-046", "label": "Mistral-7B PW-600 (sanity)",
-     "path": "/root/symb_invariant_consensus/results/exp046_mistral_7b_pw600/exp046_results.json"},
+     "path": "./results/exp046_mistral_7b_pw600/exp046_results.json"},
     {"exp_id": "exp-034", "label": "Qwen2.5-14B PW-600",
-     "path": "/root/symb_invariant_consensus/results/exp034_qwen25_14b_proofwriter/exp034_results.json"},
+     "path": "./results/exp034_qwen25_14b_proofwriter/exp034_results.json"},
 ]
 
 EXPERIMENTS_16639 = [
     {"exp_id": "exp-052", "label": "Mistral-7B FOLIO-204 seed=123",
-     "path": "/root/symb_invariant_consensus/results/exp052_mistral_folio204_seed123/exp052_results.json"},
+     "path": "./results/exp052_mistral_folio204_seed123/exp052_results.json"},
     {"exp_id": "exp-053", "label": "Mistral-7B FOLIO-204 seed=456",
-     "path": "/root/symb_invariant_consensus/results/exp053_mistral_folio204_seed456/exp053_results.json"},
+     "path": "./results/exp053_mistral_folio204_seed456/exp053_results.json"},
     {"exp_id": "exp-039", "label": "Qwen2.5-14B PW-600",
-     "path": "/root/symb_invariant_consensus/results/exp032_qwen25_14b_pw600/results.json"},
+     "path": "./results/exp032_qwen25_14b_pw600/results.json"},
 ]
 
 
@@ -143,8 +143,8 @@ def main():
             continue
         print(f"{r['exp_id']:<14} {r['n']:>4} {r['new_sc_pct']:>7.2f}% {r['sica_pct']:>7.2f}% {r['delta_pp']:>+7.2f} {r['b_sc_correct_sica_wrong']:>4} {r['c_sc_wrong_sica_correct']:>4} {r['p_value']:>12.6f} {r['sig']:>5}")
 
-    out = {"server": f"westd-{server}", "results": all_results}
-    out_path = Path(f"/root/symb_invariant_consensus/results/mcnemar_recomputed_{server}.json")
+    out = {"server": f"server-{server}", "results": all_results}
+    out_path = Path(f"./results/mcnemar_recomputed_{server}.json")
     with open(out_path, "w") as f:
         json.dump(out, f, indent=2)
     print(f"\nSaved to {out_path}")

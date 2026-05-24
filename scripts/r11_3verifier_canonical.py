@@ -22,15 +22,15 @@ from collections import Counter
 from scipy.stats import binomtest
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
-PW_DATA = "/root/symb_invariant_consensus/data/proofwriter_full.json"
-SC_VOTES = "/root/symb_invariant_consensus/data/mistral_pw600_sc_votes.json"
-D116_PATH = "/root/symb_invariant_consensus/results/d116_qwen3_pw_deberta_large/results.json"
-OUTPUT_PATH = "/root/symb_invariant_consensus/results/r11_3verifier_canonical.json"
+PW_DATA = "./data/proofwriter_full.json"
+SC_VOTES = "./data/mistral_pw600_sc_votes.json"
+D116_PATH = "./results/d116_qwen3_pw_deberta_large/results.json"
+OUTPUT_PATH = "./results/r11_3verifier_canonical.json"
 
 MODELS = {
-    "DeBERTa-large-MNLI": "/root/autodl-tmp/models/deberta-large-mnli",
-    "RoBERTa-large-MNLI": "/root/autodl-tmp/models/roberta-large-mnli",
-    "BART-large-MNLI": "/root/autodl-tmp/models/bart-large-mnli",
+    "DeBERTa-large-MNLI": "./models/deberta-large-mnli",
+    "RoBERTa-large-MNLI": "./models/roberta-large-mnli",
+    "BART-large-MNLI": "./models/bart-large-mnli",
 }
 
 CLASSES = ["True", "False", "Unknown"]

@@ -165,7 +165,7 @@ def analyze_constraint_counts(problem: dict) -> dict:
 
 
 def main():
-    base = Path("/root/symb_invariant_consensus")
+    base = Path(os.path.dirname(os.path.abspath(__file__)))
     data = json.load(open(base / "results/case_study_constraints.json"))
 
     exp001_expected = {

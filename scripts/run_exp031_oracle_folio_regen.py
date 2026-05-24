@@ -308,7 +308,7 @@ def mcnemar_test(results, key_a, key_b):
 
 
 def main():
-    base_dir = "/root/symb_invariant_consensus"
+    base_dir = os.path.dirname(os.path.abspath(__file__))
     data_path = os.path.join(base_dir, "data/folio_full.json")
     traces_dir = os.path.join(base_dir, "results/folio_204_14b/intermediates")
     output_dir = os.path.join(base_dir, "results/oracle_folio_regen")

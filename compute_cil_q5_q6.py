@@ -3,7 +3,7 @@ import numpy as np
 from collections import Counter
 import os
 
-BASE = "/root/symb_invariant_consensus/results"
+BASE = "./results"
 
 ###############################################################################
 # CIL computation: I(V; Y | G) — conditional mutual information

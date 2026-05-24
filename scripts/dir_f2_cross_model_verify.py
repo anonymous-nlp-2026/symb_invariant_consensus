@@ -23,7 +23,7 @@ from collections import Counter
 
 import requests
 
-sys.path.insert(0, '/root/symb_invariant_consensus')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from sica.z3_maxsat import (
     parse_z3_formula, ConstraintDeduplicator, MaxSATSolver,
     UniqueConstraint,
@@ -33,11 +33,11 @@ from sica.scorer import InvariantScorer
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
-RESULTS_DIR = Path('/root/symb_invariant_consensus/results/exp033_mistral_7b_folio204')
+RESULTS_DIR = Path('./results/exp033_mistral_7b_folio204')
 CACHE_DIR = RESULTS_DIR / 'constraint_cache'
 INTER_DIR = RESULTS_DIR / 'intermediates'
-FOLIO_PATH = Path('/root/symb_invariant_consensus/data/folio_full.json')
-OUT_DIR = Path('/root/symb_invariant_consensus/results/dir_f2_cross_model_verification')
+FOLIO_PATH = Path('./data/folio_full.json')
+OUT_DIR = Path('./results/dir_f2_cross_model_verification')
 
 VLLM_URL = "http://localhost:8012/v1/chat/completions"
 MODEL_NAME = "Mistral-7B-Instruct-v0.3"
@@ -94,7 +94,7 @@ Does this constraint logically follow from the premises above?
 Think step by step, then answer with exactly one word on the last line: Yes, No, or Uncertain."""
 
     payload = {
-        "model": "/root/autodl-tmp/models/Mistral-7B-Instruct-v0.3",
+        "model": "./models/Mistral-7B-Instruct-v0.3",
         "messages": [{"role": "user", "content": prompt}],
         "temperature": VERIFY_TEMPERATURE,
         "max_tokens": VERIFY_MAX_TOKENS,

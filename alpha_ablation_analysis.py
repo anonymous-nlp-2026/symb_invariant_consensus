@@ -8,19 +8,19 @@ import time
 from collections import Counter
 from pathlib import Path
 
-sys.path.insert(0, "/root/symb_invariant_consensus")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from sica.z3_maxsat import ConstraintDeduplicator, MaxSATSolver, MaxSATResult
 from sica.scorer import InvariantScorer
 
 CONDITIONS = {
     "Mistral-7B_FOLIO": {
-        "constraint_dir": "/root/symb_invariant_consensus/results/exp033_mistral_7b_folio204/constraint_cache",
-        "results_file": "/root/symb_invariant_consensus/results/exp033_mistral_7b_folio204/exp033_results.json",
+        "constraint_dir": "./results/exp033_mistral_7b_folio204/constraint_cache",
+        "results_file": "./results/exp033_mistral_7b_folio204/exp033_results.json",
         "label": "Mistral-7B x FOLIO (BR=4.97)",
     },
     "Qwen25-14B_FOLIO": {
-        "constraint_dir": "/root/symb_invariant_consensus/results/multi_seed/qwen25_folio_seed123/per_trace_constraints",
-        "results_file": "/root/symb_invariant_consensus/results/multi_seed/qwen25_folio_seed123/results.json",
+        "constraint_dir": "./results/multi_seed/qwen25_folio_seed123/per_trace_constraints",
+        "results_file": "./results/multi_seed/qwen25_folio_seed123/results.json",
         "label": "Qwen2.5-14B x FOLIO (seed123)",
     },
 }
@@ -172,7 +172,7 @@ def run_condition(name, config):
 
 
 def main():
-    output_dir = "/root/symb_invariant_consensus/results/alpha_ablation"
+    output_dir = "./results/alpha_ablation"
     os.makedirs(output_dir, exist_ok=True)
 
     all_results = {}

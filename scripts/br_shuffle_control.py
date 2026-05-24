@@ -1,7 +1,7 @@
 import json, os, glob, numpy as np
 from collections import defaultdict
 
-RESULTS_DIR = "/root/symb_invariant_consensus/results"
+RESULTS_DIR = "./results"
 N_SHUFFLE = 1000
 SEED = 42
 

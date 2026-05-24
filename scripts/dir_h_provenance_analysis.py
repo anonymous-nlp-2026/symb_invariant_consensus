@@ -19,15 +19,15 @@ from collections import Counter, defaultdict
 
 from scipy.stats import chi2_contingency, fisher_exact, mannwhitneyu
 
-sys.path.insert(0, '/root/symb_invariant_consensus')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from sica.z3_maxsat import ConstraintDeduplicator, MaxSATSolver
 from sica.scorer import InvariantScorer
 from sica.pipeline import normalize_logic_answer
 
-FOLIO_PATH = '/root/symb_invariant_consensus/data/folio_full.json'
-CACHE_DIR = '/root/symb_invariant_consensus/results/exp033_mistral_7b_folio204/constraint_cache'
-INTERMED_DIR = '/root/symb_invariant_consensus/results/exp033_mistral_7b_folio204/intermediates'
-OUTPUT_DIR = '/root/symb_invariant_consensus/results/dir_h_provenance_analysis'
+FOLIO_PATH = './data/folio_full.json'
+CACHE_DIR = './results/exp033_mistral_7b_folio204/constraint_cache'
+INTERMED_DIR = './results/exp033_mistral_7b_folio204/intermediates'
+OUTPUT_DIR = './results/dir_h_provenance_analysis'
 
 STOP_WORDS = {
     'the', 'a', 'an', 'is', 'are', 'was', 'were', 'be', 'been', 'being',

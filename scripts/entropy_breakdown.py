@@ -76,14 +76,14 @@ def to_row(exp_id, model, dataset, group_name, g):
 
 EXPERIMENTS = [
     # (exp_id, model, dataset, path, server)
-    ("exp033", "Mistral-7B", "FOLIO-204 (s42)", "/root/symb_invariant_consensus/results/exp033_mistral_7b_folio204/exp033_results.json"),
-    ("exp052", "Mistral-7B", "FOLIO-204 (s123)", "/root/symb_invariant_consensus/results/exp052_mistral_folio204_seed123/exp052_results.json"),
-    ("exp053", "Mistral-7B", "FOLIO-204 (s456)", "/root/symb_invariant_consensus/results/exp053_mistral_folio204_seed456/exp053_results.json"),
-    ("exp046", "Mistral-7B", "PW-600", "/root/symb_invariant_consensus/results/exp046_mistral_7b_pw600/exp046_results.json"),
-    ("exp036", "Qwen2.5-14B", "FOLIO-204", "/root/symb_invariant_consensus/results/exp036_qwen25_14b_folio204/results.json"),
-    ("exp038", "Qwen2.5-14B", "LogiQA-200", "/root/symb_invariant_consensus/results/exp038_qwen25_14b_logiqa200/results.json"),
-    ("exp035", "Qwen2.5-7B", "FOLIO-204", "/root/symb_invariant_consensus/results/exp035_qwen25_7b_folio204/exp035_results.json"),
-    ("exp048", "LLaMA-3.1-8B", "PW-600", "/root/symb_invariant_consensus/results/exp048_llama8b_pw600/exp048_results.json"),
+    ("exp033", "Mistral-7B", "FOLIO-204 (s42)", "./results/exp033_mistral_7b_folio204/exp033_results.json"),
+    ("exp052", "Mistral-7B", "FOLIO-204 (s123)", "./results/exp052_mistral_folio204_seed123/exp052_results.json"),
+    ("exp053", "Mistral-7B", "FOLIO-204 (s456)", "./results/exp053_mistral_folio204_seed456/exp053_results.json"),
+    ("exp046", "Mistral-7B", "PW-600", "./results/exp046_mistral_7b_pw600/exp046_results.json"),
+    ("exp036", "Qwen2.5-14B", "FOLIO-204", "./results/exp036_qwen25_14b_folio204/results.json"),
+    ("exp038", "Qwen2.5-14B", "LogiQA-200", "./results/exp038_qwen25_14b_logiqa200/results.json"),
+    ("exp035", "Qwen2.5-7B", "FOLIO-204", "./results/exp035_qwen25_7b_folio204/exp035_results.json"),
+    ("exp048", "LLaMA-3.1-8B", "PW-600", "./results/exp048_llama8b_pw600/exp048_results.json"),
 ]
 
 if __name__ == '__main__':

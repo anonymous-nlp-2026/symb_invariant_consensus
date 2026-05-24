@@ -23,7 +23,7 @@ from collections import Counter
 
 import httpx
 
-sys.path.insert(0, '/root/symb_invariant_consensus')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from sica.constraint_extractor import LOGIC_EXTRACTION_PROMPT
 from sica.z3_maxsat import ConstraintDeduplicator, MaxSATSolver
 from sica.scorer import InvariantScorer

@@ -92,7 +92,7 @@ def process_exp(base_dir, K=12):
         "categories_seen": sorted(set(cat for d in data for cat in d.keys()))
     }
 
-results_dir = "/root/symb_invariant_consensus/results"
+results_dir = "./results"
 experiments = []
 for d in sorted(os.listdir(results_dir)):
     intdir = os.path.join(results_dir, d, "intermediates")

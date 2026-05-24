@@ -10,15 +10,15 @@ import time
 from collections import Counter
 import httpx
 
-sys.path.insert(0, '/root/symb_invariant_consensus')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from sica.constraint_extractor import LOGIC_EXTRACTION_PROMPT
 from sica.z3_maxsat import ConstraintDeduplicator, MaxSATSolver
 from sica.scorer import InvariantScorer
 
 API_BASE = 'http://localhost:8020/v1'
-INTERMEDIATES_DIR = '/root/symb_invariant_consensus/results/exp033_mistral_7b_folio204/intermediates'
-RESULTS_FILE = '/root/symb_invariant_consensus/results/exp033_mistral_7b_folio204/exp033_results.json'
-OUTPUT_DIR = '/root/symb_invariant_consensus/results/direction_g_decoupling'
+INTERMEDIATES_DIR = './results/exp033_mistral_7b_folio204/intermediates'
+RESULTS_FILE = './results/exp033_mistral_7b_folio204/exp033_results.json'
+OUTPUT_DIR = './results/direction_g_decoupling'
 
 CONCLUSION_PATTERNS = [
     r'\\boxed\{[^}]*\}',

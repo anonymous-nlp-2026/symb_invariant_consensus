@@ -196,7 +196,7 @@ def compute_stats(results):
 
 def main():
     parser = argparse.ArgumentParser(description="Analyze seed replication for FOLIO-204 Mistral-7B K=12")
-    parser.add_argument("--results-dir", default="/root/symb_invariant_consensus/results",
+    parser.add_argument("--results-dir", default="./results",
                         help="Root results directory")
     args = parser.parse_args()
 

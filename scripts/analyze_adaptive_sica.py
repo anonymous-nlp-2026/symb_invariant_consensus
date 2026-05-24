@@ -2,7 +2,7 @@
 import json, math, os, sys
 from collections import Counter
 
-RESULTS_BASE = "/root/symb_invariant_consensus/results"
+RESULTS_BASE = "./results"
 EXPERIMENTS = [
     ("exp-033", "Mistral-7B", "FOLIO-204", "exp033_mistral_7b_folio204/exp033_results.json"),
     ("exp-001/026", "Qwen2.5-14B", "FOLIO-204", "folio_204_14b/folio_204_results.json"),

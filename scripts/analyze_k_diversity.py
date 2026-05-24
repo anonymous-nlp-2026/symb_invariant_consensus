@@ -8,7 +8,7 @@ from collections import Counter
 from itertools import combinations
 from pathlib import Path
 
-RESULTS_DIR = Path("/root/symb_invariant_consensus/results")
+RESULTS_DIR = Path("./results")
 
 DATA_SOURCES = {
     4:  RESULTS_DIR / "exp051_mistral_k_sensitivity" / "k4",

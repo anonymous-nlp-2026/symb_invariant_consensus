@@ -294,8 +294,8 @@ async def main_async(args):
 def main():
     parser = argparse.ArgumentParser(description="Frontier SC-Baseline on FOLIO-204")
     parser.add_argument("--models", required=True)
-    parser.add_argument("--data", default="/root/symb_invariant_consensus/data/folio_full.json")
-    parser.add_argument("--output-dir", default="/root/symb_invariant_consensus/results/exp_d135_frontier_scb/")
+    parser.add_argument("--data", default="./data/folio_full.json")
+    parser.add_argument("--output-dir", default="./results/exp_d135_frontier_scb/")
     parser.add_argument("--k", type=int, default=12)
     parser.add_argument("--concurrency", type=int, default=5)
     args = parser.parse_args()

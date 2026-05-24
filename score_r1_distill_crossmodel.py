@@ -8,13 +8,13 @@ import numpy as np
 from collections import Counter
 from pathlib import Path
 
-sys.path.insert(0, '/root/symb_invariant_consensus')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from sica.z3_maxsat import ConstraintDeduplicator, MaxSATSolver
 from sica.scorer import InvariantScorer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-RESULTS_DIR = Path("/root/symb_invariant_consensus/results/exp_r1_distill_8b_sica")
+RESULTS_DIR = Path("./results/exp_r1_distill_8b_sica")
 INTERMEDIATES_DIR = RESULTS_DIR / "intermediates"
 CONSTRAINTS_V2_DIR = RESULTS_DIR / "per_trace_constraints_v2"
 

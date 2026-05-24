@@ -27,7 +27,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import httpx
 
-sys.path.insert(0, '/root/symb_invariant_consensus')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from sica.constraint_extractor import LOGIC_EXTRACTION_PROMPT
 from sica.z3_maxsat import ConstraintDeduplicator, MaxSATSolver, parse_z3_formula
 from sica.scorer import InvariantScorer
@@ -45,9 +45,9 @@ SEED = 42
 MISTRAL_PORT = 8000
 QWEN3_PORT = 8001
 
-DATA_PATH = '/root/symb_invariant_consensus/data/proofwriter_full.json'
-QWEN3_INTER_DIR = '/root/symb_invariant_consensus/results/exp033_qwen3_14b_pw600_nonthinking/intermediates'
-OUT_DIR = '/root/symb_invariant_consensus/results/exp_d126_crossmodel_sica'
+DATA_PATH = './data/proofwriter_full.json'
+QWEN3_INTER_DIR = './results/exp033_qwen3_14b_pw600_nonthinking/intermediates'
+OUT_DIR = './results/exp_d126_crossmodel_sica'
 
 VALID_ANSWERS = {'True', 'False', 'Unknown'}
 

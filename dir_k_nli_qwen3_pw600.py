@@ -11,10 +11,10 @@ from scipy.stats import binomtest
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
 
-TRACES_PATH = "/root/symb_invariant_consensus/results/exp033_qwen3_14b_pw600_nonthinking/results.json"
-PW_DATA_PATH = "/root/symb_invariant_consensus/data/proofwriter_full.json"
-OUTPUT_DIR = "/root/symb_invariant_consensus/results/dir_k_nli_qwen3_proofwriter"
-MODEL_NAME = "/root/autodl-tmp/models/deberta-base-mnli"
+TRACES_PATH = "./results/exp033_qwen3_14b_pw600_nonthinking/results.json"
+PW_DATA_PATH = "./data/proofwriter_full.json"
+OUTPUT_DIR = "./results/dir_k_nli_qwen3_proofwriter"
+MODEL_NAME = "./models/deberta-base-mnli"
 CLASSES = ["True", "False", "Unknown"]
 WEIGHTS = [1, 3, 5]
 

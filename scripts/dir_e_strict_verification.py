@@ -13,7 +13,7 @@ from collections import Counter
 from math import comb
 from pathlib import Path
 
-sys.path.insert(0, '/root/symb_invariant_consensus')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from sica.z3_maxsat import parse_z3_formula, ConstraintDeduplicator, UniqueConstraint
 
 import z3
@@ -21,10 +21,10 @@ import z3
 z3.set_param('smt.random_seed', 42)
 z3.set_param('sat.random_seed', 42)
 
-CONSTRAINT_CACHE_DIR = Path('/root/symb_invariant_consensus/results/exp033_mistral_7b_folio204/constraint_cache')
-RESULTS_FILE = Path('/root/symb_invariant_consensus/results/exp033_mistral_7b_folio204/exp033_results.json')
-SC_MATRIX_FILE = Path('/root/symb_invariant_consensus/results/exp033_mistral_7b_folio204/sc_answer_matrix.json')
-OUTPUT_DIR = Path('/root/symb_invariant_consensus/results/dir_e_strict_verification')
+CONSTRAINT_CACHE_DIR = Path('./results/exp033_mistral_7b_folio204/constraint_cache')
+RESULTS_FILE = Path('./results/exp033_mistral_7b_folio204/exp033_results.json')
+SC_MATRIX_FILE = Path('./results/exp033_mistral_7b_folio204/sc_answer_matrix.json')
+OUTPUT_DIR = Path('./results/dir_e_strict_verification')
 N_PROBLEMS = 30
 CANDIDATES = ['True', 'False', 'Unknown']
 ALPHA = 0.5

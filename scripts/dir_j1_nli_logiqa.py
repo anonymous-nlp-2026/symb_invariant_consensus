@@ -18,9 +18,9 @@ from scipy.stats import binomtest
 import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
-MODEL_PATH = "/root/autodl-tmp/models/deberta-base-mnli"
-TRACE_DIR = Path("/root/symb_invariant_consensus/results/exp049b_mistral_logiqa200/intermediates")
-OUTPUT_DIR = Path("/root/symb_invariant_consensus/results/dir_j1_nli_logiqa")
+MODEL_PATH = "./models/deberta-base-mnli"
+TRACE_DIR = Path("./results/exp049b_mistral_logiqa200/intermediates")
+OUTPUT_DIR = Path("./results/dir_j1_nli_logiqa")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 DEVICE = "cpu"

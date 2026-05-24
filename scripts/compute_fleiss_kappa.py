@@ -124,7 +124,7 @@ def process_experiment(results_dir, exp_name):
     return result
 
 if __name__ == '__main__':
-    base = '/root/symb_invariant_consensus/results'
+    base = './results'
     
     results = {}
     

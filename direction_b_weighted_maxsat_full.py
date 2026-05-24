@@ -23,7 +23,7 @@ import logging
 from pathlib import Path
 from collections import Counter
 
-sys.path.insert(0, '/root/symb_invariant_consensus')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from sica.z3_maxsat import (
     parse_z3_formula, ConstraintDeduplicator, MaxSATSolver,
     UniqueConstraint,
@@ -32,7 +32,7 @@ from sica.scorer import InvariantScorer
 
 logging.basicConfig(level=logging.WARNING)
 
-RESULTS_DIR = Path('/root/symb_invariant_consensus/results/exp033_mistral_7b_folio204')
+RESULTS_DIR = Path('./results/exp033_mistral_7b_folio204')
 CACHE_DIR = RESULTS_DIR / 'constraint_cache'
 INTER_DIR = RESULTS_DIR / 'intermediates'
 N = 204

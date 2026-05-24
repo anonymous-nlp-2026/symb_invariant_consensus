@@ -14,9 +14,9 @@ from pathlib import Path
 
 import z3
 
-CONSTRAINT_DIR = Path("/root/symb_invariant_consensus/results/exp033_mistral_7b_folio204/constraint_cache")
-ANSWER_MATRIX = Path("/root/symb_invariant_consensus/results/exp033_mistral_7b_folio204/sc_answer_matrix.json")
-OUTPUT_DIR = Path("/root/symb_invariant_consensus/results/direction_k_minority_report")
+CONSTRAINT_DIR = Path("./results/exp033_mistral_7b_folio204/constraint_cache")
+ANSWER_MATRIX = Path("./results/exp033_mistral_7b_folio204/sc_answer_matrix.json")
+OUTPUT_DIR = Path("./results/direction_k_minority_report")
 N_PROBLEMS = 204
 Z3_TIMEOUT_MS = 10_000
 

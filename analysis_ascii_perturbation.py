@@ -33,8 +33,8 @@ K = 4
 TEMPERATURE = 0.7
 TOP_P = 0.95
 MAX_TOKENS = 4096
-DATA_PATH = "/root/symb_invariant_consensus/data/folio_full.json"
-RESULTS_DIR = "/root/symb_invariant_consensus/results/wild2_ascii_perturbation"
+DATA_PATH = "./data/folio_full.json"
+RESULTS_DIR = "./results/wild2_ascii_perturbation"
 
 SOLVE_PROMPT = """Solve the following math problem step by step. Show all your reasoning.
 At the end, put your final answer in \\boxed{{}}.

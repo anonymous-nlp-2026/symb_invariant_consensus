@@ -9,14 +9,14 @@ import sys
 import random
 from collections import Counter
 
-sys.path.insert(0, "/root/symb_invariant_consensus")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from sica.pipeline import _group_logic_answers
 
 random.seed(42)
 
-INTERMEDIATES_DIR = "/root/symb_invariant_consensus/results/folio_204_14b/intermediates"
-RESULTS_FILE = "/root/symb_invariant_consensus/results/folio_204_14b/folio_204_results.json"
-OUTPUT_DIR = "/root/autodl-tmp/sica_project/results/k_ablation_folio204"
+INTERMEDIATES_DIR = "./results/folio_204_14b/intermediates"
+RESULTS_FILE = "./results/folio_204_14b/folio_204_results.json"
+OUTPUT_DIR = "./results/k_ablation_folio204"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 K_VALUES = [3, 4, 6, 8, 11, 12]

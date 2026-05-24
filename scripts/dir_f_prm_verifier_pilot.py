@@ -15,9 +15,9 @@ import requests
 
 # ── Config ──────────────────────────────────────────────────────────────
 VLLM_URL = "http://localhost:8012/v1/completions"
-MODEL_ID = "/root/autodl-tmp/models/Mistral-7B-Instruct-v0.3"
-INTERMEDIATES_DIR = Path("/root/symb_invariant_consensus/results/exp033_mistral_7b_folio204/intermediates")
-OUTPUT_DIR = Path("/root/symb_invariant_consensus/results/dir_f_prm_verifier_pilot")
+MODEL_ID = "./models/Mistral-7B-Instruct-v0.3"
+INTERMEDIATES_DIR = Path("./results/exp033_mistral_7b_folio204/intermediates")
+OUTPUT_DIR = Path("./results/dir_f_prm_verifier_pilot")
 NUM_QUESTIONS = 30
 
 

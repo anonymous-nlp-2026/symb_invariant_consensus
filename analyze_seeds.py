@@ -132,11 +132,11 @@ def analyze_exp(name, path):
 # Analyze both experiments
 exp052 = analyze_exp(
     "exp-052 (seed=123)",
-    "/root/symb_invariant_consensus/results/exp052_mistral_folio204_seed123/exp052_results.json"
+    "./results/exp052_mistral_folio204_seed123/exp052_results.json"
 )
 exp053 = analyze_exp(
     "exp-053 (seed=456)",
-    "/root/symb_invariant_consensus/results/exp053_mistral_folio204_seed456/exp053_results.json"
+    "./results/exp053_mistral_folio204_seed456/exp053_results.json"
 )
 
 # exp-033 reference values (from user's table)
@@ -176,7 +176,7 @@ full_result = {
 }
 
 # Save
-out_path = "/root/symb_invariant_consensus/results/seed_replication_analysis.json"
+out_path = "./results/seed_replication_analysis.json"
 with open(out_path, "w") as f:
     json.dump(full_result, f, indent=2)
 

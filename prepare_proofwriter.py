@@ -1,15 +1,15 @@
 """
 Prepare a 10-problem ProofWriter subset in SICA-compatible format.
-Reads from /root/autodl-tmp/crdd/data/proofwriter/proofwriter-OWA-D5-validation.jsonl
-Outputs to /root/symb_invariant_consensus/data/proofwriter_subset.json
+Reads from ./external_data/proofwriter/proofwriter-OWA-D5-validation.jsonl
+Outputs to ./data/proofwriter_subset.json
 """
 import json
 import random
 import re
 import os
 
-SRC = "/root/autodl-tmp/crdd/data/proofwriter/proofwriter-OWA-D5-validation.jsonl"
-DST = "/root/symb_invariant_consensus/data/proofwriter_subset.json"
+SRC = "./external_data/proofwriter/proofwriter-OWA-D5-validation.jsonl"
+DST = "./data/proofwriter_subset.json"
 
 ANSWER_MAP = {"A": "True", "B": "False", "C": "Unknown"}
 QUESTION_PREFIX = re.compile(

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Dry-run for exp-060: test 3 problems with Qwen2.5-14B cross-extraction."""
 import os, json, sys, time
-sys.path.insert(0, "/root/symb_invariant_consensus")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from sica.constraint_extractor import ConstraintExtractor, APIBasedLLM
 from sica.z3_maxsat import ConstraintDeduplicator, MaxSATSolver
 from sica.scorer import InvariantScorer

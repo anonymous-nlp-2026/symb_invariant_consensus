@@ -1,6 +1,6 @@
 import json, os, math
 
-RESULTS_DIR = "/root/symb_invariant_consensus/results"
+RESULTS_DIR = "./results"
 
 CONDITIONS = {
     "Mistral-7B x FOLIO": os.path.join(RESULTS_DIR, "exp033_mistral_7b_folio204/exp033_results.json"),

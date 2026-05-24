@@ -141,11 +141,11 @@ def compute_one(name, model, intermediates_dir):
 EXPERIMENTS = {
     "exp036": {
         "model": "Qwen2.5-14B",
-        "dir": "/root/symb_invariant_consensus/results/exp036_qwen25_14b_folio204/intermediates",
+        "dir": "./results/exp036_qwen25_14b_folio204/intermediates",
     },
     "exp063": {
         "model": "LLaMA-3.1-8B",
-        "dir": "/root/symb_invariant_consensus/results/exp-063-llama8b-folio204-16639/intermediates",
+        "dir": "./results/exp-063-llama8b-folio204-16639/intermediates",
     },
 }
 
@@ -165,7 +165,7 @@ if __name__ == "__main__":
         results.append(r)
         print(f"  cosine={r['mean_cosine_similarity']}, kappa={r['answer_kappa_3cat']}, r={r['pearson_r']}, conv={r['convergent_pairs_pct']}%")
 
-    out = "/root/symb_invariant_consensus/results/process_kappa_summary_16639.json"
+    out = "./results/process_kappa_summary_16639.json"
     with open(out, "w") as f:
         json.dump(results, f, indent=2)
     print(f"\nSaved to {out}")

@@ -10,7 +10,7 @@ import sys
 import time
 from collections import Counter
 
-sys.path.insert(0, "/root/symb_invariant_consensus")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from sica.constraint_extractor import ConstraintExtractor, APIBasedLLM
 from sica.z3_maxsat import ConstraintDeduplicator, MaxSATSolver
 from sica.scorer import InvariantScorer

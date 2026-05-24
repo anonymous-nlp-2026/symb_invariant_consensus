@@ -3,7 +3,7 @@ import numpy as np
 from collections import Counter
 import math
 
-BASE = "/root/symb_invariant_consensus/results"
+BASE = "./results"
 
 def compute_cil(v_outputs, ground_truths, g_answers):
     """Compute CIL = I(V; Y | G) in bits."""

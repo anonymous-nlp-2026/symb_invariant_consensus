@@ -4,11 +4,11 @@ import sys
 from pathlib import Path
 from collections import Counter
 
-sys.path.insert(0, "/root/symb_invariant_consensus")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from sica.z3_maxsat import ConstraintDeduplicator, MaxSATSolver
 from sica.scorer import InvariantScorer
 
-DATA_DIR = Path("/root/symb_invariant_consensus/results/folio_204_14b")
+DATA_DIR = Path("./results/folio_204_14b")
 PER_TRACE_DIR = DATA_DIR / "per_trace_constraints"
 INTERMEDIATES_DIR = DATA_DIR / "intermediates"
 RESULTS_FILE = DATA_DIR / "folio_204_results.json"

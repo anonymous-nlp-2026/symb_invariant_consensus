@@ -12,7 +12,7 @@ import numpy as np
 from collections import Counter
 from itertools import combinations
 
-sys.path.insert(0, '/root/symb_invariant_consensus')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 CELLS = {
     'cell_a': {
@@ -190,7 +190,7 @@ def mcnemar_test(results_a, results_b):
 
 
 def main():
-    base = '/root/symb_invariant_consensus'
+    base = os.path.dirname(os.path.abspath(__file__))
 
     # Load intermediates for SC and kappa
     print("Loading intermediates...")

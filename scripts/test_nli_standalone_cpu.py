@@ -8,18 +8,18 @@ import sys
 import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
 
-PW_DATA = "/root/symb_invariant_consensus/data/proofwriter_full.json"
-OUTPUT_DIR = "/root/symb_invariant_consensus/results/nli_standalone_cpu_test"
+PW_DATA = "./data/proofwriter_full.json"
+OUTPUT_DIR = "./results/nli_standalone_cpu_test"
 DEVICE = "cpu"
 
 MODELS = {
     "roberta-large-mnli": {
-        "path": "/root/autodl-tmp/models/roberta-large-mnli",
+        "path": "./models/roberta-large-mnli",
         "type": "standard",  # entailment=2, neutral=1, contradiction=0
         "label_map": {2: "True", 1: "Unknown", 0: "False"},
     },
     "bart-large-mnli": {
-        "path": "/root/autodl-tmp/models/bart-large-mnli",
+        "path": "./models/bart-large-mnli",
         "type": "zero-shot",  # uses zero-shot-classification pipeline
         "label_map": None,  # handled by pipeline
     },

@@ -105,7 +105,7 @@ def load_from_intermediates_ordered(intermediates_dir):
 
 def main():
     parser = argparse.ArgumentParser(description="Track discordant pairs for exp-028b")
-    parser.add_argument("--results-dir", default="/root/symb_invariant_consensus/results",
+    parser.add_argument("--results-dir", default="./results",
                         help="Root results directory")
     parser.add_argument("--exp-dir", default=None,
                         help="Direct path to exp-028b directory")

@@ -175,7 +175,7 @@ ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 
 # no tight_layout — manual subplots_adjust above
-outdir = '/home/ubuntu/.agent-ml-research-idea_gen_0513_3/projects/symb_invariant_consensus/docs/paper/figures'
+outdir = './docs/paper/figures'
 fig.savefig(f'{outdir}/capability_gap_scatter.pdf')
 fig.savefig(f'{outdir}/capability_gap_scatter.png')
 print("Saved to", outdir)

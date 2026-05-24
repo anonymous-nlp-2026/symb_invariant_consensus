@@ -7,9 +7,9 @@ Usage:
     python scripts/finetune_deberta_pw.py --depth-filter D5  # only depth-5 training data
 """
 
-# Environment setup for westd-16639:
+# Environment setup for server-A:
 #   export CUDA_VISIBLE_DEVICES=<free_gpu_id>
-#   export LD_LIBRARY_PATH=/root/miniconda3/lib/python3.12/site-packages/nvidia/cu13/lib:$LD_LIBRARY_PATH
+#   export LD_LIBRARY_PATH=/path/to/cuda/lib:$LD_LIBRARY_PATH
 
 
 import argparse
@@ -25,9 +25,9 @@ from transformers import (
 )
 from sklearn.metrics import accuracy_score
 
-MODEL_PATH = "/root/autodl-tmp/models/deberta-large-mnli"
-PW_VAL_PATH = "/root/symb_invariant_consensus/data/proofwriter_full.json"
-DEFAULT_OUTPUT_DIR = "/root/symb_invariant_consensus/checkpoints/deberta-large-pw-finetuned"
+MODEL_PATH = "./models/deberta-large-mnli"
+PW_VAL_PATH = "./data/proofwriter_full.json"
+DEFAULT_OUTPUT_DIR = "./checkpoints/deberta-large-pw-finetuned"
 
 PW_TO_NLI = {"True": 2, "False": 0, "Unknown": 1}
 NLI_TO_PW = {2: "True", 0: "False", 1: "Unknown"}
@@ -225,7 +225,7 @@ def main():
         if args.train_data:
             train_examples = load_local_train(args.train_data, args.depth_filter)
         else:
-            local_jsonl = "/root/symb_invariant_consensus/data/proofwriter_train_hf.jsonl"
+            local_jsonl = "./data/proofwriter_train_hf.jsonl"
             if os.path.exists(local_jsonl):
                 train_examples = load_local_train(local_jsonl, args.depth_filter)
             else:

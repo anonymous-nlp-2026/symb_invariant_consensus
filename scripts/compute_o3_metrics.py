@@ -3,7 +3,7 @@ import json, os, numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-BASE = "/root/symb_invariant_consensus/results/exp_d135_frontier_scb/o3"
+BASE = "./results/exp_d135_frontier_scb/o3"
 FRONTIER_RESULTS = os.path.join(BASE, "results.json")
 CROSS_MODEL_RESULTS = os.path.join(BASE, "cross_model/cross_model_mistral.json")
 
