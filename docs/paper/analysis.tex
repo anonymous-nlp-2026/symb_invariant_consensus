@@ -1,0 +1,133 @@
+\section{The Symbolic Mirage}
+\label{sec:analysis}
+
+\subsection{Symbolic Confirmation Bias}
+\label{sec:confirmation-bias}
+
+\looseness=-1 Self-extracted constraints systematically align with the model's majority answer---a persistent empirical property of zero-shot self-extraction pipelines, not a cognitive bias analogy. On Mistral-7B FOLIO, when SICA errs, 83.3\% of constraints support the incorrect answer---bias ratio $4.97\times$ (Table~\ref{tab:cross-model-bias})---and 94\% of errors overlap with SC. Z3 rejects only 3.4\% of constraints, and MAX-SAT produces answers identical to count-only aggregation on $\geq$99\% of problems across all weight settings $\alpha$ (Table~\ref{tab:alpha-ablation}), confirming that the formal verification layer is vacuous (Eq.~\ref{eq:degenerate}): 99\% of constraints pass Z3 validation yet add no information beyond majority voting.
+
+\looseness=-1 Crucially, BR $> 1$ is not an independent finding but a corollary of the degeneration identified in Observation~1: under source-attribution scoring, constraint weight is proportional to trace count, so the majority answer necessarily receives more support. A permutation null model---randomizing constraint--answer associations while preserving per-trace counts (1{,}000 permutations)---confirms this: $\text{BR}_\text{null} \approx \text{BR}_\text{obs}$ ($\text{BR}_\text{excess} \approx 0$; $p > 0.7$) across all tested conditions. BR thus quantifies the degree of extraction degeneration---how completely constraints collapse to majority-vote equivalents---not an independent bias signal. On problems where SC is correct, constraints still track the majority ($\text{BR}_\text{correct}$ $1.29$--$3.64\times$), confirming that self-extracted constraints reflect distributional frequency rather than logical validity.
+
+\looseness=-1 The pattern generalizes across nine models from 7B to frontier (BR $1.66$--$4.97\times$; Table~\ref{tab:frontier-scb}) and all eight cells of a $2{\times}2$ generator${\times}$extractor matrix (range $1.94$--$2.70$; Appendix~\ref{app:2x2}). Constraints use trace-specific variables (56.4\% zero variable overlap across answer groups), collapsing aggregation to majority voting.
+
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\caption{Symbolic confirmation bias across nine models on FOLIO ($n = 204$). BR: mean per-problem bias ratio. $n_\text{err}$: number of incorrect instances on which BR is computed. $\Delta$: SICA $-$ SC (pp). Ext.: $^a$self-extraction; $^b$cross-model (Mistral-7B extracts FOL from target traces). $^*$Interim ($n = 95/204$). $^\dagger$8 API-failure questions excluded ($n = 196$). All models exhibit $\text{BR} > 1$; BR estimates for high-accuracy models ($n_\text{err} < 40$) have wider confidence intervals; Gemini ($n_\text{err} \approx 12$) should be interpreted with particular caution. Process-level similarity ($\kappa_{\text{proc}}$) ranges from $0.25$ (R1-Distill) to $0.79$ (gpt-4o/4.1/Gemini); see Table~\ref{tab:cross-model-process}.}
+\label{tab:frontier-scb}
+\resizebox{\columnwidth}{!}{\begin{tabular}{@{}llrrrrl@{}}
+\toprule
+Model & Ext. & SC (\%) & $n_\text{err}$ & BR & $\Delta$ (pp) \\
+\midrule
+Mistral-7B & $^a$ & 55.88 & 90 & 4.97 & 0.00 \\
+LLaMA-8B & $^a$ & \textrm{---} & \textrm{---} & 2.88 & \textrm{---} \\
+Qwen-14B & $^a$ & 75.98 & 49 & 3.85 & $-$0.49 \\
+\addlinespace
+R1-Distill-8B & $^b$ & 74.51 & 52 & 2.92 & $+$2.45 \\
+gpt-4o & $^a$ & 76.96 & 47 & 2.65 & $-$1.96 \\
+gpt-4.1 & $^b$ & 82.84 & 35 & 2.70 & $-$1.47 \\
+gpt-5.5 & $^b$ & 84.31 & 32 & 3.48 & $+$0.49 \\
+o3$^\dagger$ & $^b$ & 82.65 & 34 & 1.66 & 0.00 \\
+Gemini-2.5-Pro$^*$ & $^b$ & 87.37 & 12 & 2.79 & $-$1.05 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\looseness=-1 Two controls rule out answer leakage: BR is uniform across reasoning steps (Fisher $p = 0.71$), and removing answer sentences before extraction yields no BR decrease (Wilcoxon $p \geq 0.12$) despite accuracy loss (McNemar $p < 0.013$). The bias reflects a distributional prior embedded throughout reasoning, not answer contamination.
+
+\label{sec:process-kappa}
+\looseness=-1 Reasoning-process overlap exceeds answer-level correlation: mean process similarity (pairwise TF-IDF cosine) reaches 0.69 on Mistral-7B FOLIO, far exceeding answer-level $\kappa$ ($0.41$--$0.51$). The gap generalizes across four families (Table~\ref{tab:cross-model-process}). Under cross-model extraction, SICA gain decreases monotonically with process similarity ($\rho = -1.0$, $p = 0.008$; Table~\ref{tab:process-gradient}; conditional correction analysis in Appendix~\ref{app:cil}).
+
+\looseness=-1 These patterns---universal BR $> 1$, structural equivalence to trace-count distributions, and process-level correlation exceeding answer-level agreement---follow from a persistent empirical property of zero-shot self-extraction pipelines.
+
+\smallskip\noindent
+\textbf{Observation 1} \textit{(Argmax Preservation).}\;%
+Let $t_1, \ldots, t_K \overset{\mathrm{i.i.d.}}{\sim} P_M(\cdot \mid q)$ with trace-determined answers $a_i = h(t_i)$ and $n_a = |\{i : a_i = a\}|$.
+Under (i)~the degeneration condition $|\mathcal{C}^{\setminus}| \approx 0$ (Eq.~\ref{eq:degenerate}), (ii)~source-attribution scoring where $\sigma(c,a) {=} 1$ iff $c$ originates from a trace producing $a$ (Eq.~\ref{eq:score}), and (iii)~approximately uniform constraint yield per trace within each answer group, SICA reduces to majority vote: $\arg\max_a \operatorname{score}(a) = \arg\max_a n_a$.
+
+\smallskip\noindent
+\textit{Empirical support.}\;%
+The degeneration condition is quantified by the Z3 rejection rate: $|\mathcal{C}^{\setminus}|/|\mathcal{C}| \approx 0.034$, confirming $|\mathcal{C}^{\setminus}| \approx 0$. Source-attribution restricts each constraint's contribution to its originating answer. For condition~(iii), per-trace constraint yield averages $5.6$--$6.0$ constraints across answer groups (median within-problem CV${=}0.26$; Appendix~\ref{app:constraint-quality}), making total weight approximately proportional to $n_a$. SICA and majority vote select the same answer on 96.1\% of problems for Qwen2.5-14B ($n{=}804$; Table~\ref{tab:ablation}) and over 90\% across all tested conditions. Varying constraint weight $\alpha$ across $[0,1]$---from pure Z3 satisfiability ($\alpha{=}0$, no source-attribution) to full source-attribution ($\alpha{=}1$)---preserves ${\geq}99\%$ agreement (Table~\ref{tab:alpha-ablation}), confirming that the equivalence is driven by degeneration rather than the specific weighting scheme.
+
+\smallskip\noindent
+\textit{Per-trace separation analysis.}\;%
+Across 81\% of problems with non-unanimous votes (Mistral-7B, FOLIO), per-trace constraint density is balanced between majority and minority answer groups ($6.0$ vs.\ $5.9$ constraints/trace) and MAX-SAT exclusion rates are comparable ($0.185$ vs.\ $0.172$): the extraction itself is unbiased. Volume amplification is ${\approx}1.0\times$---the constraint layer neither inflates nor dampens the CoT vote ratio. Yet source-attribution binds each constraint to its originating trace's answer: 92.2\% of non-unanimous problems contain cross-group shared formulas that contribute to each answer group in proportion to its trace count, providing no discriminative signal. On 82.4\% of problems where the minority vote is correct, SICA still follows the majority (correction rate 17.6\%). SCB is thus not an independent bias introduced by extraction but a transparency property of the pipeline: source-attribution scoring is informationally transparent to the CoT trace distribution, preserving rather than correcting the majority-vote structure.
+
+\looseness=-1 By the data processing inequality \citep{cover2006elements}, $I(C_{1:K};\, Y) \leq I(T_{1:K};\, Y)$ for any deterministic extraction $f$. The contribution is not this standard bound but the identification of the $M{\to}T{\to}A{\to}C$ Markov chain structure in self-extraction pipelines: under the degeneration condition of Observation~1 ($|\mathcal{C}^{\setminus}| \approx 0$), constraints are fully determined by answers, yielding the tighter bound $I(C;\, Y) \leq I(A;\, Y)$ and the approximate conditional independence $C \approx\!\!\perp Y \mid A$ (Figure~\ref{fig:causal-dag}). This is a necessary condition, not a sufficient explanation; the empirical findings (Observation~1, BR, degeneration condition) provide the sufficient evidence.
+
+\smallskip\noindent
+\textbf{Remark.}\;%
+Observation~1 assumes degeneration and source attribution. Under \emph{semantic} evaluation, the equivalence additionally requires \emph{answer alignment}: $P(c_i \text{ supports } a_i) \geq P(c_i \text{ supports } a')$ for $a' \neq a_i$, which is structurally motivated and empirically validated ($\mathrm{BR} \in [1.66,\, 4.97]$; Table~\ref{tab:frontier-scb}), but could fail if $f$ systematically extracted premises contradicting their source trace's conclusion.
+Since Observation~1 shows SICA reduces to majority vote under degeneration, $\mathrm{BR} \geq 1$ follows from the trace-count geometry; the empirical BR consistently exceeds this floor ($1.66\times$--$4.97\times$; Table~\ref{tab:frontier-scb}), reflecting both base-rate effects and extraction alignment.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  node distance=0.8cm,
+  nd/.style={rectangle, rounded corners=2pt, draw=black!50,
+             fill=gray!6, minimum height=5.5mm, minimum width=8mm,
+             font=\small},
+  bn/.style={nd, fill=red!10, draw=red!50, line width=0.7pt},
+  ex/.style={nd, draw=gray!50, densely dashed, fill=white},
+  >=Stealth,
+  base/.style={->, semithick, black!50},
+  leak/.style={->, line width=0.85pt, red!50},
+  sub/.style={font=\scriptsize, text=gray!55},
+]
+\node[nd]             (M) {$M$};
+\node[nd, right=of M] (T) {$T$};
+\node[bn, right=of T] (A) {$A$};
+\node[nd, right=of A] (C) {$C$};
+\node[nd, right=of C] (S) {$S$};
+\node[ex, above=0.65cm of A] (Y) {$Y$};
+
+\node[sub, below=0.5mm of M] {Model};
+\node[sub, below=0.5mm of T] {Trace};
+\node[sub, below=0.5mm of A] {Answer};
+\node[sub, below=0.5mm of C] {Constr.};
+\node[sub, below=0.5mm of S] {SICA};
+\node[sub, above=0.5mm of Y] {Truth};
+
+\draw[base] (M) -- (T);
+\draw[leak] (T) -- (A);
+\draw[leak] (A) -- (C);
+\draw[base] (C) -- (S);
+\draw[base, bend right=22] (T) to (C);
+
+\draw[densely dashed, gray!30, shorten >=1pt, shorten <=1pt] (Y) -- (A);
+
+\node[font=\tiny, text=red!45, fill=white, inner sep=0.5pt]
+  at ($(A)!0.5!(C) + (0, 0.27)$) {\textit{bottleneck}};
+
+\node[draw=gray!30, rounded corners=1.5pt, fill=white,
+      inner sep=2.5pt, font=\scriptsize, text=gray!50,
+      right=0.2cm of Y]
+  {$C \approx\!\!\perp Y \mid A$};
+\end{tikzpicture}
+\caption{Causal DAG of the self-extraction pipeline. All information about ground truth $Y$ reaching constraints $C$ is mediated by answer $A$. Approximate conditional independence ($C \approx\!\!\perp Y \mid A$) is empirically supported by ${>}90\%$ argmax agreement (Observation~1) but is not a formal consequence of the DPI bound.}
+\label{fig:causal-dag}
+\end{figure}
+
+\looseness=-1 Since the bias holds across all tested models, tasks, and extraction functions, training-free remediation strategies face a structural limitation: methods that preserve extraction accuracy necessarily inherit the model's distributional prior. This regularity holds across all 27 tested zero-shot template extraction strategies; whether few-shot or iterative refinement approaches alter this pattern remains open.
+
+\subsection{Why Remediation Fails}
+\label{sec:remediation}
+\label{sec:interventions}
+
+\looseness=-1 All 27 training-free variants within the constraint-extraction paradigm, spanning four categories, produce neutral-to-negative results (Figure~\ref{fig:interventions-summary}; Appendices~\ref{app:extraction}--\ref{app:entropy}). The pattern reveals a persistent independence-accuracy trade-off. \emph{Diversity-seeking strategies} (temperature variation, persona sampling) shift $K_\text{eff}$ by $< 0.5$---insufficient to break correlation. \emph{Constraint-level interventions} (explicit negation, contrastive prompting) leave the Z3 rejection rate at ${\sim}3.4\%$---degeneration persists. \emph{Debate} ($\kappa = 0.15$, $\Delta = -18.6$\,pp) breaks correlation but collapses accuracy; \emph{cross-model extraction} leaves $\kappa$ near the same-model ceiling ($\kappa \approx 0.40$--$0.47$). No individual strategy achieves significance after correction (Appendix~\ref{app:intervention-individual}). Across three model families, self-extraction cannot produce constraints independent of the distributional prior.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/fig2_interventions_compact.pdf}
+\caption{Twenty-three of 27 training-free strategies across four categories (four additional strategies tested but omitted for clarity). All produce neutral-to-negative $\Delta$ vs.\ SC. Grey band: $\pm 1$\,pp noise zone.}
+\label{fig:interventions-summary}
+\end{figure}
+
+\subsection{Diagnostic Framework}
+\label{sec:diagnostic-framework}
+\label{sec:diagnostics}
+
+\looseness=-1 Three zero-cost diagnostics predict the outcome of any self-extraction-based aggregation method from a $K = 12$ pilot run: (1) the degenerate-regime indicator $C_0 < 5\%$ (SICA reduces to SC); (2) the diversity floor $K_\text{eff} \leq 1.30$ (insufficient vote diversity for any aggregation gain); (3) the bias ratio BR combined with SC regime (Type~A: SC $\geq 60\%$ with BR $> 1$ predicts confirmation-bias degradation; Type~C: SC $\leq 40\%$ predicts error amplification). These boundaries correctly characterize the failure mode across all 60 tested conditions (16 main configurations, 27 remediation variants on Mistral-7B${\times}$FOLIO, and 17 analytical conditions) within the self-extraction paradigm. The framework's practical value lies in failure-mode diagnosis---degenerate, diversity-limited, or confirmation-biased---from a $K{=}12$ pilot run, enabling practitioners to rule out self-extraction before full deployment. Conversely, when diagnostics detect sufficient capability gap (\S\ref{sec:cross-arch}), the framework correctly predicts positive gain ($+6.67$\,pp for Mistral-7B on ProofWriter).
+
+\looseness=-1 Decision boundaries ($C_0 < 5\%$, $K_\text{eff} \leq 1.30$, SC $< 40\%$) were derived from Mistral-7B and Qwen2.5-14B. We evaluate prospectively on two held-out generators: LLaMA-3.1-8B (different family) on FOLIO, where the framework predicts Type~A bias and the observed $\Delta = -4.41$\,pp confirms; and Qwen3-14B (same family, different generation) on FOLIO and ProofWriter, likewise confirmed ($\Delta \leq +1.47$\,pp, n.s.).

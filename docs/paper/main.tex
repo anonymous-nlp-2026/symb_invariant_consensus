@@ -1,0 +1,82 @@
+\documentclass[11pt]{article}
+\usepackage[review]{acl}
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+% \usepackage{inconsolata} % removed: not available in this TeX distribution
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,fit}
+\usepackage{listings}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+\lstset{
+  basicstyle=\small\ttfamily,
+  breaklines=true,
+  frame=single,
+  xleftmargin=1em,
+  xrightmargin=1em,
+  aboveskip=0.5em,
+  belowskip=0.5em,
+}
+
+\graphicspath{{../figures/paper/}{figures/}}
+
+\title{Beyond Self-Consistency: Self-Extracted Constraints\\Provide No Detectable Improvement in LLM Reasoning}
+
+\author{Anonymous}
+
+\begin{document}
+\maketitle
+
+% Tighten spacing for 8-page budget
+\setlength{\textfloatsep}{5pt plus 2pt minus 4pt}
+\setlength{\dbltextfloatsep}{5pt plus 2pt minus 4pt}
+\setlength{\floatsep}{3pt plus 2pt minus 2pt}
+\setlength{\dblfloatsep}{3pt plus 2pt minus 2pt}
+\setlength{\abovecaptionskip}{2pt}
+\setlength{\belowcaptionskip}{0pt}
+\setlength{\abovedisplayskip}{4pt plus 1pt minus 2pt}
+\setlength{\belowdisplayskip}{4pt plus 1pt minus 2pt}
+\setlength{\intextsep}{5pt plus 1pt minus 2pt}
+
+\input{abstract}
+
+\input{introduction}
+
+\input{related_work}
+
+\input{method}
+
+\input{experiments}
+
+\input{analysis}
+
+\input{solutions}
+
+\input{discussion}
+
+\section*{Limitations}
+\input{limitations_content}
+
+\bibliography{references}
+
+\appendix
+\input{appendix}
+
+\end{document}

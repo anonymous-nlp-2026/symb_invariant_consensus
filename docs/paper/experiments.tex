@@ -1,0 +1,52 @@
+\section{Results}
+\label{sec:results}
+\label{sec:main-results}
+
+\looseness=-1 Table~\ref{tab:main_results} reports accuracy across all non-degenerate self-extraction conditions sorted by SC baseline. Two confirmatory conditions show significant degradation after BH FDR control ($m{=}6$; multi-seed aggregates and extensions are exploratory): Mistral-7B on ProofWriter ($-2.83$\,pp, raw $p = 0.014$, adj.\ $p = 0.042$) and Qwen2.5-14B on ProofWriter ($-2.50$\,pp, raw $p = 0.011$, adj.\ $p = 0.042$). No condition shows a significant positive effect. An aggregate sign test yields 8 positive and 7 negative $\Delta$ values ($p = 1.00$, two-sided). When SICA and SC disagree, SC selects the correct answer $2.6\times$ more often (139 vs.\ 53 across conditions), indicating that constraint-based reweighting introduces noise rather than corrective signal.
+
+\begin{table*}[t]
+\centering
+\small
+\caption{SICA vs.\ SC across all non-degenerate self-extraction conditions (sorted by SC). Two conditions show significant degradation after BH correction ($m{=}6$ confirmatory; remaining exploratory); no condition shows a significant gain. $\Delta$ = SICA $-$ SC (pp). Symbols: $^b$gold ICL; \textbf{bold}: $p < 0.05$; {*}\,BH adj.\ $p = 0.042$; $^{3s}$\,3-seed aggregate; $^{4s}$\,4-seed confirmatory aggregate (unmarked: single-seed exploratory; s123/s456/s789 are individual seed runs). All conditions have McNemar power $< 80\%$ for $|\Delta| = 2$\,pp (Appendix~\ref{app:power}). Degenerate conditions ($C_0 < 5\%$: QwQ-32B AIME $n{=}22$, Qwen2.5-14B GSM8K $n{=}30$) yield $\Delta = 0$ and are reported separately in Appendix~\ref{app:oracle}.}
+\label{tab:main_results}
+\begin{tabular}{@{}llrrrrl@{}}
+\toprule
+Model & Domain & $n$ & SC (\%) & SICA (\%) & $\Delta$ (pp) & $p$ \\
+\midrule
+\multicolumn{7}{l}{\textit{Type C: error amplification (SC $\leq$ 40\%)}} \\
+Mistral-7B & PW-D5 & 600 & 39.33 & 36.50 & $\mathbf{-2.83}$ & 0.014{*} \\
+\midrule
+\multicolumn{7}{l}{\textit{Intermediate SC (SC $\sim$50--60\%, Mistral-7B only)}} \\
+Mistral-7B & LogiQA & 200 & 50.00 & 51.50 & $+$1.50 & 0.581 \\
+Mistral-7B & FOLIO (s123) & 204 & 54.41 & 57.35 & $+$2.94 & 0.070 \\
+Mistral-7B$^{3s}$ & FOLIO & 204 & 56.53 & 56.70 & $+$0.16 & 1.000 \\
+Mistral-7B & FOLIO (s456) & 204 & 55.88 & 55.88 & 0.00 & 1.000 \\
+Mistral-7B & FOLIO (s789) & 204 & 59.31 & 56.86 & $-$2.45 & 0.267 \\
+\midrule
+\multicolumn{7}{l}{\textit{Type A: confirmation bias (SC $\geq$ 60\%)}} \\
+LLaMA-3.1-8B & FOLIO & 204 & 66.18 & 61.76 & $-$4.41 & 0.093 \\
+LLaMA-3.1-8B & StrategyQA & 200 & 72.00 & 74.00 & $+$2.00 & 0.424 \\
+\addlinespace
+Qwen2.5-14B & FOLIO (ICL)$^b$ & 199 & 74.37 & 74.87 & $+$0.50 & 1.000 \\
+Qwen2.5-14B & PW-D5 & 600 & 74.00 & 71.50 & $\mathbf{-2.50}$ & 0.011{*} \\
+Qwen2.5-14B$^{4s}$ & FOLIO & 204 & 75.01 & 73.78 & $-$1.24 & 1.000 \\
+Qwen2.5-7B & FOLIO & 204 & 75.98 & 76.47 & $+$0.49 & 1.000 \\
+Qwen2.5-14B & LogiQA & 200 & 79.00 & 78.00 & $-$1.00 & 0.625 \\
+\addlinespace
+Qwen3-14B & FOLIO & 204 & 83.33 & 84.80 & $+$1.47 & 1.000 \\
+Qwen3-14B & PW-D5 & 600 & 85.83 & 85.67 & $-$0.17 & 1.000 \\
+Qwen3-14B (think) & FOLIO & 204 & 86.27 & 86.76 & $+$0.49 & 1.000 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{f2_regime_scatter}
+\caption{SICA $\Delta$ (pp) vs.\ SC baseline. Filled: $n \geq 100$; open: $n < 100$. The intermediate-SC region (50--60\%, shaded) contains the only positive trends (none reaching $p < 0.05$). Type~C: nominally significant degradation (raw $p = 0.014$; BH adj.\ $p = 0.042$).}
+\label{fig:regime-scatter}
+\end{figure}
+
+\looseness=-1 Figure~\ref{fig:regime-scatter} reveals regime structure. Fleiss' $\kappa$ ranges from 0.21 to 0.82, yielding $K_{\text{eff}} = 1.20\text{--}3.62$ at $K = 12$ (Table~\ref{tab:independence}, Appendix). Three regimes emerge: Type~C (SC $\leq 40\%$), where low accuracy causes error amplification; an intermediate band (50--60\%), containing the only positive trends; and Type~A (SC $\geq 60\%$), where symbolic confirmation bias dominates. Seed-level noise is substantial: across three Mistral-7B seeds, $\Delta$ ranges from $+2.94$ to $-2.45$\,pp despite $\kappa \in [0.45, 0.51]$. We trace the mechanism in \S\ref{sec:analysis}.
+
+\looseness=-1 TOST equivalence tests \citep{lakens2017equivalence} with pre-specified margin $\pm 2$\,pp confirm four conditions as equivalent; ten remain underpowered for effects below ${\sim}2$\,pp (MDE 1.86--4.84\,pp; sensitivity analysis in Appendix~\ref{app:power},~\ref{app:tost}). Absence of evidence is not evidence of absence for small effects. Multi-seed replication confirms robustness: mean $\Delta = +0.16 \pm 2.70$\,pp across three Mistral-7B seeds (Table~\ref{tab:multi-seed}); four Qwen2.5-14B seeds yield $\Delta \in [0.00, -2.01]$\,pp. Oracle controls with gold annotations confirm the MAX-SAT mechanism is sound ($+29.90$/$+13.73$\,pp FOLIO, $+17.17$\,pp ProofWriter; $p < 0.001$), yet self-extraction captures only ${\sim}$12\% of this ceiling (Appendix~\ref{app:oracle}).

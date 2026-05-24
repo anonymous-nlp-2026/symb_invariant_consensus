@@ -1,0 +1,61 @@
+\section{Introduction}\label{sec:introduction}
+
+\looseness=-1
+Self-Consistency (SC) \citep{wang2023sc} selects the majority answer across $K$ chain-of-thought traces, a strategy grounded in the Condorcet Jury Theorem: independent voters converge to truth \citep{condorcet1785, ladha1992correlated}. In practice, SC's gains plateau for strong models \citep{loo2025reevaluating}, pointing to correlated traces that reduce the effective ensemble size. A natural remedy is to move beyond simple vote-counting: extract logical constraints from the traces and let a provably sound solver adjudicate. If the solver can filter contradictions and enforce logical consistency, it should recover information that raw majority voting discards.
+
+\looseness=-1
+We test this intuition through Symbolic Invariant Consensus Aggregation (SICA), which extracts logical constraints from reasoning traces (prompted as first-order logic; 99\% are propositional at the Z3 level) and selects answers via weighted partial MAX-SAT (\S\ref{sec:pipeline}; Figure~\ref{fig:pipeline}). Despite Z3 validating nearly all self-extracted constraints, SICA produces answers identical to majority voting on the vast majority of problems. Across six models (7B--32B), four benchmarks, and multi-seed replication, no condition shows a significant positive effect after FDR control (Table~\ref{tab:main_results}). Four of six powered conditions confirm equivalence within $\pm$2\,pp (TOST); the remainder are underpowered for smaller effects.
+
+\looseness=-1
+The failure is not in the solver but in the constraints it operates on. Self-extracted constraints systematically support the model's majority answer---a robust empirical regularity of zero-shot self-extraction pipelines we term \emph{symbolic confirmation bias} (\S\ref{sec:confirmation-bias}). Because each trace determines both an answer and its constraints, the formal channel reduces to a weighted echo of the majority vote. We show this degeneration is robust (Observation~1) and confirm it holds across nine models from 7B to frontier scale. Prior work shows LLMs cannot self-correct reasoning without external feedback \citep{huang2024selfcorrect}; our analysis reveals a deeper mechanism underlying these findings, providing a Markov chain formalization and actionable diagnostics for self-verification.
+
+\looseness=-1
+Twenty-seven training-free variants within the constraint-extraction paradigm confirm the trade-off is fundamental (\S\ref{sec:remediation}): methods that break trace correlation destroy accuracy, while methods that preserve accuracy fail to achieve independence. Cross-architecture verification provides preliminary evidence of escape: a structurally independent verifier yields significant gains when it exceeds the generator's accuracy, with benefit governed by a capability-gap pattern between verifier and generator (\S\ref{sec:cross-arch}). Three zero-cost diagnostics enable practitioners to predict a priori whether any self-extraction-based aggregation method will help (\S\ref{sec:diagnostic-framework}).
+
+Our contributions are:
+\begin{enumerate}[nosep,leftmargin=*]
+\item \textbf{The symbolic mirage.} Provably sound Z3 verification becomes vacuous under self-extraction. We diagnose the underlying mechanism: self-extracted constraints inherit the generating model's distributional prior (symbolic confirmation bias), reducing SICA to majority vote under source-attribution scoring (Observation~1). The pattern holds across nine models and 27 training-free variants (\S\ref{sec:confirmation-bias}, \S\ref{sec:remediation}).\footnote{Code and data will be released upon acceptance.}
+
+\item \textbf{Diagnostic framework.} Three zero-cost diagnostics characterize failure modes across all tested conditions within the self-extraction paradigm, with prospective validation on held-out model families, providing practitioners with a priori failure-mode diagnosis from a pilot run (\S\ref{sec:diagnostic-framework}).
+
+\item \textbf{Cross-architecture escape.} Preliminary evidence that structurally independent verification can break the bottleneck, with gain governed by a capability-gap pattern between verifier and generator (\S\ref{sec:cross-arch}).
+\end{enumerate}
+
+\begin{figure}[t]
+\centering
+\small
+\resizebox{\columnwidth}{!}{\begin{tikzpicture}[
+    node distance=0.3cm and 0.1cm,
+    box/.style={draw, rounded corners=2pt, minimum height=0.55cm,
+                text width=1.2cm, align=center, font=\scriptsize},
+    arr/.style={-{Stealth[length=4pt]}, thick},
+    darr/.style={-{Stealth[length=4pt]}, thick, densely dashed},
+    lbl/.style={font=\scriptsize, text=gray!70!black},
+    ibottle/.style={draw=red!70!black, densely dashed, rounded corners=3pt,
+                    inner sep=3pt},
+]
+\node[box] (q) {Question $q$};
+\node[box, right=of q] (sample) {Sample $K$\\traces};
+\node[box, right=of sample] (extract) {Extract logical\\constraints};
+\node[box, right=of extract] (dedup) {Dedup.\ +\\weight};
+\node[box, right=of dedup] (maxsat) {MAX-SAT\\(Z3)};
+
+\node[box, below=0.7cm of maxsat, fill=gray!12] (ans) {Answer $a^*$};
+\node[box, below=0.7cm of sample, fill=gray!12] (sc) {Majority\\vote};
+
+\draw[arr] (q) -- (sample);
+\draw[arr] (sample) -- (extract);
+\draw[arr] (extract) -- (dedup);
+\draw[arr] (dedup) -- (maxsat);
+\draw[arr] (maxsat) -- (ans);
+\draw[arr] (sample) -- node[lbl, right, yshift=0pt] {SC} (sc);
+
+\node[lbl, above=0.01cm of maxsat] {SICA};
+
+\node[ibottle, fit=(sample)(extract), label={[font=\scriptsize\itshape, text=red!70!black]above:Independence Bottleneck}] {};
+
+\draw[darr, gray!60] ([xshift=-0.1cm]dedup.south) -- ++(0,-0.35) node[lbl, below, yshift=-0.05cm] {oracle: gold FOL};
+\end{tikzpicture}}
+\caption{The SICA pipeline. SC selects the majority answer from $K$ traces. SICA extracts logical constraints, deduplicates, and solves MAX-SAT via Z3. Red dashed box: the independence bottleneck. Dashed arrow: oracle variant with gold FOL.}
+\label{fig:pipeline}
+\end{figure}
