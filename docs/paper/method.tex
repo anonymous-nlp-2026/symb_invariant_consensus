@@ -25,7 +25,7 @@ Symbolic Invariant Consensus Aggregation (SICA) extends SC by extracting formal 
 \label{eq:maxsat}
 \mathcal{C}^* = \arg\max_{\mathcal{S} \subseteq \mathcal{C}} \sum_{c \in \mathcal{S}} w_c \quad \text{s.t.} \quad \mathcal{S} \text{ is satisfiable.}
 \end{equation}
-Z3 \citep{demoura2008z3} solves this with a 10-second timeout. Answer assertion constraints ($\texttt{answer\_a} == \texttt{True}$, weight 1) ensure every candidate receives a nonzero base score, making SICA a strict generalization of SC.
+Z3 \citep{demoura2008z3} solves this with a 10-second timeout (Algorithm~\ref{alg:maxsat}; Appendix~\ref{app:z3-pseudocode}). Answer assertion constraints ($\texttt{answer\_a} == \texttt{True}$, weight 1) ensure every candidate receives a nonzero base score, making SICA a strict generalization of SC.
 
 \paragraph{Scoring.} Let $\mathcal{C}^{\setminus} = \mathcal{C} \setminus \mathcal{C}^*$. Each candidate $a$ is scored by:
 \begin{equation}
@@ -57,4 +57,4 @@ where $c$ is a self-extracted constraint, $a_M$ the model's majority answer, and
 
 \paragraph{Datasets.} FOLIO~\citep{han2022folio} ($n{=}204$, gold logical annotations), ProofWriter depth-5~\citep{tafjord2021proofwriter} ($n{=}600$), LogiQA~\citep{liu2020logiqa} ($n{=}200$), StrategyQA~\citep{geva2021strategyqa} ($n{=}200$). GSM8K ($n{=}30$) and AIME 2024 ($n{=}22$) probe the degenerate regime ($C_0 < 5\%$).
 
-\paragraph{Parameters.} $K{=}12$ traces at $T{=}0.7$, extraction at $T_{\text{ext}}{=}0.3$, $\alpha{=}0.5$, Z3 timeout 10s. McNemar exact test ($\alpha{=}0.05$); 95\% bootstrap CIs ($10{,}000$ resamples) for $n \geq 200$. SICA incurs $4.5{\times}$ SC wall-clock; extraction accounts for 76\% of overhead.
+\paragraph{Parameters.} $K{=}12$ traces at $T{=}0.7$, extraction at $T_{\text{ext}}{=}0.3$, $\alpha{=}0.5$, Z3 timeout 10s (K-sensitivity analysis in Appendix~\ref{app:sensitivity}). McNemar exact test ($\alpha{=}0.05$); 95\% bootstrap CIs ($10{,}000$ resamples; Appendix~\ref{app:bootstrap}) for $n \geq 200$. SICA incurs $4.5{\times}$ SC wall-clock; extraction accounts for 76\% of overhead.
