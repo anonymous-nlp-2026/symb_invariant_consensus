@@ -12,7 +12,7 @@
 \looseness=-1 DeBERTa NLI alone achieves 49.51\% on FOLIO and 55.00\% on ProofWriter. Combo $w{=}3$ yields $+6.67$\,pp on ProofWriter for Mistral-7B ($p < 0.001$, significant after BH correction) and $+2.94$\,pp on FOLIO (n.s.); all generators with SC $\geq 72\%$ show no significant improvement ($\Delta \leq +1.47$\,pp). Same-model SICA \emph{degrades} ProofWriter ($-2.83$\,pp; Table~\ref{tab:main_results}), illustrating that corrective signal must originate outside the model's distribution.
 
 \paragraph{Capability gap.}
-\looseness=-1 Across 108 conditions (three NLI architectures, four generators, three domains), gain decreases monotonically with generator accuracy, a preliminary \emph{capability-gap pattern} ($\rho = 1.0$, $p = 0.003$; exploratory, $n{=}6$ limits statistical confidence; Figure~\ref{fig:capability-gap}). Based on six data points, this pattern requires validation on larger generator pools. All significant gains concentrate below the verifier's standalone accuracy; on ProofWriter ($n{=}600$; Table~\ref{tab:cross_generator_nli}), only Mistral-7B (SC below DeBERTa's 55.00\%) gains significantly ($+6.67$\,pp, $p < 0.001$; BART/RoBERTa \emph{degrade} strong generators at $w{=}5$; Appendix~\ref{app:multi-nli}).
+\looseness=-1 Across 108 conditions (three NLI architectures, four generators, three domains), gain decreases monotonically with generator accuracy, a preliminary \emph{capability-gap pattern} ($\rho = 1.0$, $p = 0.003$; exploratory, $n{=}6$ limits statistical confidence; Figure~\ref{fig:capability-gap}). Based on six data points, this pattern requires validation on larger generator pools. All significant gains concentrate below the verifier's standalone accuracy; on ProofWriter ($n{=}600$; Table~\ref{tab:cross_generator_nli}), only Mistral-7B (SC below DeBERTa's 55.00\%) gains significantly ($+6.67$\,pp, $p < 0.001$; BART/RoBERTa \emph{degrade} strong generators at $w{=}5$; Appendices~\ref{app:multi-nli},~\ref{app:3verifier-bh}).
 
 \begin{table}[t]
 \centering
@@ -31,4 +31,4 @@ Qwen3-14B & Qwen & 85.83\% & $-$30.83 & $+$0.50\,pp & 0.453 \\
 \end{tabular}}
 \end{table}
 
-\looseness=-1 Fine-tuning the NLI verifier extends gains to generators with SC up to ${\sim}$72\% (Appendix~\ref{app:finetuned-nli}). Cross-model LLM voting degrades strong generators while NLI never does, confirming that structural independence, not merely model diversity, drives the escape (Appendix~\ref{app:cross-model-ablation}).
+\looseness=-1 Fine-tuning the NLI verifier extends gains to generators with SC up to ${\sim}$72\% (Appendix~\ref{app:finetuned-nli}). Cross-model LLM voting degrades strong generators while NLI never does, confirming that structural independence, not merely model diversity, drives the escape (Appendices~\ref{app:cross-model-ablation},~\ref{app:drc}).
