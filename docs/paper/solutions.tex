@@ -3,21 +3,21 @@
 \label{sec:cross-arch}
 
 \paragraph{Motivation.}
-\looseness=-1 No training-free self-extraction method achieves independence from the model's distributional prior (\S\ref{sec:remediation}). The DPI bound implies that any escape must break the self-extraction dependency: $I(C;Y) \leq I(T;Y)$ binds whenever constraints are deterministic functions of the generating model's traces. We test whether a structurally independent verifier, sharing neither architecture nor training data with the generator, provides corrective signal that escapes this bound.
+\looseness=-1 No training-free self-extraction method achieves independence from the model's distributional prior (\S\ref{sec:remediation}). We test whether a structurally independent verifier, sharing neither architecture nor training data with the generator, can escape the information-theoretic bottleneck $I(C;Y) \leq I(T;Y)$.
 
 \paragraph{Method.}
-\looseness=-1 We use DeBERTa-large \citep{he2021deberta} (406M, encoder-only), fine-tuned on MultiNLI \citep{williams2018mnli}, to classify (premise, conclusion) pairs as entailment, contradiction, or neutral. In combo mode, each NLI-supporting vote counts $w$ times alongside SC's $K$ votes. We evaluate on Mistral-7B FOLIO ($n = 204$) and ProofWriter depth-5 ($n = 600$).
+\looseness=-1 We use DeBERTa-large \citep{he2021deberta} (406M, encoder-only), fine-tuned on MultiNLI \citep{williams2018mnli} for Natural Language Inference (NLI), to classify (premise, conclusion) pairs as entailment, contradiction, or neutral. In combo mode, each NLI-supporting vote counts $w$ times alongside SC's $K$ votes. We evaluate on Mistral-7B FOLIO ($n = 204$) and ProofWriter depth-5 ($n = 600$).
 
 \paragraph{Zero-shot results.}
 \looseness=-1 DeBERTa NLI alone achieves 49.51\% on FOLIO and 55.00\% on ProofWriter. Combo $w{=}3$ yields $+6.67$\,pp on ProofWriter for Mistral-7B ($p < 0.001$, significant after BH correction) and $+2.94$\,pp on FOLIO (n.s.); all generators with SC $\geq 72\%$ show no significant improvement ($\Delta \leq +1.47$\,pp). Same-model SICA \emph{degrades} ProofWriter ($-2.83$\,pp; Table~\ref{tab:main_results}), illustrating that corrective signal must originate outside the model's distribution.
 
 \paragraph{Capability gap.}
-\looseness=-1 Across 108 verifier-generator-weight combinations spanning three NLI architectures, four generators, and three domains, gain decreases monotonically with generator accuracy---a \emph{capability-gap pattern}. Of 72 above-verifier conditions, none shows a significant improvement; all significant gains concentrate below the verifier's standalone accuracy. The pattern is quantified by a perfect rank correlation across architectures ($\rho = 1.0$, $p = 0.003$, $n{=}6$; Figure~\ref{fig:capability-gap}; data points in Appendix~\ref{app:capability-gap}). On ProofWriter ($n{=}600$; Table~\ref{tab:cross_generator_nli}), only Mistral-7B (SC below DeBERTa's 55.00\%) gains significantly ($+6.67$\,pp, $p < 0.001$). At $w{=}5$, BART and RoBERTa \emph{degrade} Qwen2.5-14B ($-3.43$/$-4.41$\,pp; Appendix~\ref{app:multi-nli}).
+\looseness=-1 Across 108 conditions (three NLI architectures, four generators, three domains), gain decreases monotonically with generator accuracy, a preliminary \emph{capability-gap pattern} ($\rho = 1.0$, $p = 0.003$; exploratory, $n{=}6$ limits statistical confidence; Figure~\ref{fig:capability-gap}). Based on six data points, this pattern requires validation on larger generator pools. All significant gains concentrate below the verifier's standalone accuracy; on ProofWriter ($n{=}600$; Table~\ref{tab:cross_generator_nli}), only Mistral-7B (SC below DeBERTa's 55.00\%) gains significantly ($+6.67$\,pp, $p < 0.001$; BART/RoBERTa \emph{degrade} strong generators at $w{=}5$; Appendix~\ref{app:multi-nli}).
 
 \begin{table}[t]
 \centering
 \small
-\caption{Cross-generator NLI escape with DeBERTa-large-mnli verifier (55.00\% standalone, ProofWriter $n{=}600$). Combo gain decreases monotonically with generator capability. Only Mistral-7B (SC below the verifier) shows a significant $w{=}3$ gain.}
+\caption{Cross-generator NLI escape with DeBERTa-large-mnli verifier (55.00\% standalone, ProofWriter $n{=}600$). Combo gain decreases monotonically with generator capability.}
 \label{tab:cross_generator_nli}
 \resizebox{\columnwidth}{!}{\begin{tabular}{@{}llcccc@{}}
 \toprule
@@ -31,8 +31,4 @@ Qwen3-14B & Qwen & 85.83\% & $-$30.83 & $+$0.50\,pp & 0.453 \\
 \end{tabular}}
 \end{table}
 
-\paragraph{Domain-adapted verifier.}
-\looseness=-1 Fine-tuning DeBERTa on ProofWriter depth-5 OWA (99.67\% standalone) amplifies escape: $+$12.67/$+$11.67\,pp for Mistral-7B/LLaMA-8B (up to $14\times$ over zero-shot (LLaMA-8B); Table~\ref{tab:finetuned-nli}), extending gains to generators with SC up to ${\sim}$72\%. A cost-aware cascade recovers 83--90\% of gain at ${\sim}$35\% cost (Appendix~\ref{app:drc}). These results serve as directional evidence (the domain-adapted verifier introduces training).
-
-\paragraph{Cross-model voting vs.\ cross-architecture NLI.}
-\looseness=-1 An ensemble diversity control replaces the NLI verifier with a second LLM as cross voter ($w{=}3$). With Mistral-7B as cross voter on ProofWriter, all three strong generators degrade significantly ($-2.33$ to $-9.33$\,pp, all $p \leq 0.020$); even a stronger cross voter (Qwen2.5-14B) degrades Qwen3-14B at $w{=}5$ ($-2.50$\,pp, $p = 0.006$). In contrast, DeBERTa NLI at comparable standalone accuracy (55.00\%) never degrades any generator ($\Delta \leq +0.83$\,pp). This asymmetry reflects the structural independence of encoder-only NLI---different architecture, training objective, and input representation---from autoregressive biases shared across LLM families (Table~\ref{tab:cross-model-ablation}).
+\looseness=-1 Fine-tuning the NLI verifier extends gains to generators with SC up to ${\sim}$72\% (Appendix~\ref{app:finetuned-nli}). Cross-model LLM voting degrades strong generators while NLI never does, confirming that structural independence, not merely model diversity, drives the escape (Appendix~\ref{app:cross-model-ablation}).

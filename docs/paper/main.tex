@@ -10,34 +10,35 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsthm}
-\usepackage{tcolorbox}
-\tcbuselibrary{skins}
+% tcolorbox removed: unused in content
 \usepackage{booktabs}
 \usepackage{multirow}
 \usepackage{xcolor}
 \usepackage{enumitem}
 \usepackage{subcaption}
-\usepackage{tikz}
-\usetikzlibrary{arrows.meta,positioning,calc,fit}
+% tikz removed: figures now use external PDF/PNG
 \usepackage{listings}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{hyperref}
-\usepackage{cleveref}
+% cleveref removed: unused (\Cref/\cref not called)
 
 \lstset{
   basicstyle=\small\ttfamily,
   breaklines=true,
-  frame=single,
+  frame=tb,
+  framerule=0.4pt,
+  rulecolor=\color{gray},
+  backgroundcolor=\color{gray!5},
   xleftmargin=1em,
   xrightmargin=1em,
-  aboveskip=0.5em,
-  belowskip=0.5em,
+  aboveskip=0.8em,
+  belowskip=1.2em,
 }
 
 \graphicspath{{../figures/paper/}{figures/}}
 
-\title{Beyond Self-Consistency: Self-Extracted Constraints\\Provide No Detectable Improvement in LLM Reasoning}
+\title{Beyond Self-Consistency: Self-Extracted Constraints\\Fail to Improve over Majority Voting under Zero-Shot Extraction}
 
 \author{Anonymous}
 

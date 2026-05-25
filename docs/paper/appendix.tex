@@ -3,7 +3,7 @@
 
 SICA uses domain-specific prompt templates for constraint extraction: one for mathematical reasoning (GSM8K, AIME) and one for logical reasoning (ProofWriter, FOLIO). Both share the same system prompt. The LLM is called with temperature $T{=}0.3$, max tokens $1024$, and structured JSON output mode. Up to 6 traces are processed in parallel via thread pooling, with 2 retries on failure (exponential backoff, base 0.5s).
 
-\paragraph{System Prompt.}
+\paragraph{System Prompt.}\leavevmode
 
 \begin{lstlisting}
 You are a constraint extraction tool. Output ONLY
@@ -429,6 +429,13 @@ $\alpha$ & Mistral Agr.\ (\%) & Qwen2.5 Agr.\ (\%) \\
 \section{Remediation Strategy Details}
 \label{app:remediation}
 
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.82\textwidth]{figures/fig2_interventions_compact.pdf}
+\caption{Twenty-three of 27 training-free strategies across four categories (four additional strategies tested but omitted for clarity). All produce neutral-to-negative $\Delta$ vs.\ SC. Grey band: $\pm 1$\,pp noise zone.}
+\label{fig:interventions-summary}
+\end{figure*}
+
 \begin{table}[h]
 \centering
 \small
@@ -558,8 +565,9 @@ We partition problems by trace agreement: high-entropy (majority count $\leq 8$ 
 \begin{table}[h]
 \centering
 \small
-\caption{Entropy decomposition of SICA $\Delta$ (pp). High-entropy: majority count $\leq 8$; low-entropy: majority count $\geq 9$. $^\dagger$Partial data (180/600). Pre-tiebreaking SC values; pattern robust to D064 correction.}
+\caption{Entropy decomposition of SICA $\Delta$ (pp). High-entropy: majority count $\leq 8$; low-entropy: majority count $\geq 9$. $^\dagger$Partial data (180/600). Pre-tiebreaking SC values; pattern robust to BH correction.}
 \label{tab:entropy}
+\setlength{\tabcolsep}{3.5pt}
 \begin{tabular}{@{}llrrrr@{}}
 \toprule
 Model & Dataset & \multicolumn{2}{c}{High-entropy} & \multicolumn{2}{c}{Low-entropy} \\
@@ -619,7 +627,31 @@ LLaMA-3.1-8B & $2.66\times$ & 72.7 & $-$4.41 \\
 
 \paragraph{Frontier model universality.}
 \label{app:frontier-scb}
-Table~\ref{tab:frontier-scb} (main text, \S\ref{sec:confirmation-bias}) extends confirmation bias analysis to nine models spanning 7B open-source to frontier closed-source. All models exhibit $\text{BR} > 1$ (range: $1.66$--$4.97\times$). Extraction context varies: open-source models use self-extraction (the model extracts constraints from its own traces); frontier models use cross-model extraction (Mistral-7B extracts FOL from the target model's traces), as closed-source APIs do not expose internal representations suitable for direct symbolic extraction.
+Table~\ref{tab:frontier-scb} extends confirmation bias analysis to nine models spanning 7B open-source to frontier closed-source. All models exhibit $\text{BR} > 1$ (range: $1.66$--$4.97\times$). Extraction context varies: open-source models use self-extraction (the model extracts constraints from its own traces); frontier models use cross-model extraction (Mistral-7B extracts FOL from the target model's traces), as closed-source APIs do not expose internal representations suitable for direct symbolic extraction.
+
+\begin{table}[h]
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\caption{Symbolic confirmation bias across nine models on FOLIO ($n = 204$). BR: mean per-problem bias ratio. $n_\text{err}$: number of incorrect instances on which BR is computed. $\Delta$: SICA $-$ SC (pp). Ext.: $^a$self-extraction; $^b$cross-model (Mistral-7B extracts FOL from target traces). $^*$Interim ($n = 95/204$). $^\dagger$8 API-failure questions excluded ($n = 196$). All models exhibit $\text{BR} > 1$; BR estimates for high-accuracy models ($n_\text{err} < 40$) have wider confidence intervals; Gemini ($n_\text{err} \approx 12$) should be interpreted with particular caution. Process-level similarity ($\kappa_{\text{proc}}$) ranges from $0.25$ (R1-Distill) to $0.79$ (gpt-4o/4.1/Gemini); see Table~\ref{tab:cross-model-process}.}
+\label{tab:frontier-scb}
+\resizebox{\columnwidth}{!}{\begin{tabular}{@{}llrrrrl@{}}
+\toprule
+Model & Ext. & SC (\%) & $n_\text{err}$ & BR & $\Delta$ (pp) \\
+\midrule
+Mistral-7B & $^a$ & 55.88 & 90 & 4.97 & 0.00 \\
+LLaMA-8B & $^a$ & \textrm{---} & \textrm{---} & 2.88 & \textrm{---} \\
+Qwen-14B & $^a$ & 75.98 & 49 & 3.85 & $-$0.49 \\
+\addlinespace
+R1-Distill-8B & $^b$ & 74.51 & 52 & 2.92 & $+$2.45 \\
+gpt-4o & $^a$ & 76.96 & 47 & 2.65 & $-$1.96 \\
+gpt-4.1 & $^b$ & 82.84 & 35 & 2.70 & $-$1.47 \\
+gpt-5.5 & $^b$ & 84.31 & 32 & 3.48 & $+$0.49 \\
+o3$^\dagger$ & $^b$ & 82.65 & 34 & 1.66 & 0.00 \\
+Gemini-2.5-Pro$^*$ & $^b$ & 87.37 & 12 & 2.79 & $-$1.05 \\
+\bottomrule
+\end{tabular}}
+\end{table}
 
 \paragraph{ProcessSim definition.}
 \label{app:process-sim}
@@ -656,19 +688,14 @@ gpt-4.1 & 0.792 & $-$1.47 & 2.70 \\
 \section{Independence-Accuracy Scatter Plot}
 \label{app:kappa-scatter}
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=\columnwidth]{figures/f6_kappa_accuracy_scatter}
-\caption{Independence-accuracy trade-off across aggregation methods (Mistral-7B, filled markers) and model families (LLaMA-3.1-8B, Qwen2.5-7B, Qwen2.5-14B; open markers) on FOLIO ($n = 204$). Same-model methods cluster at $\kappa \approx 0.40$--$0.47$ (gray band), while cross-model SC shows stronger correlations ($\kappa = 0.41$--$0.74$) at higher accuracy. Debate breaks correlation ($\kappa = 0.15$) at catastrophic accuracy cost. Dashed line: Mistral-7B SC baseline.}
-\label{fig:kappa-accuracy}
-\end{figure}
+The independence-accuracy scatter plot is presented in Figure~\ref{fig:kappa-accuracy} in the main text.
 
 \begin{table}[h]
 \centering
 \small
 \caption{Independence-accuracy trade-off (FOLIO, $n = 204$). Top: aggregation methods on Mistral-7B; bottom: SC across three model families. All families produce $\kappa \geq 0.41$, confirming an architecture-independent ceiling. $\kappa$: Fleiss' kappa on raw answers.}
 \label{tab:kappa_generalization}
-\setlength{\tabcolsep}{3.5pt}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}llccrr@{}}
 \toprule
 Model & Aggregation & $\kappa$ & Eff-$K$ & $K$ & Acc.\ (\%) \\
@@ -682,7 +709,7 @@ LLaMA-3.1-8B & Self-Consistency & 0.41 & 2.17 & 12 & 66.18 \\
 Qwen2.5-7B & Self-Consistency & 0.66 & 1.46 & 12 & 75.98 \\
 Qwen2.5-14B & Self-Consistency & 0.74 & 1.32 & 12 & 75.98 \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \paragraph{Trace independence metrics.}
@@ -693,9 +720,9 @@ Table~\ref{tab:independence} reports the full 15-condition breakdown of Fleiss' 
 \begin{table}[h]
 \centering
 \small
-\setlength{\tabcolsep}{3pt}
 \caption{Trace independence metrics ($K = 12$, sorted by $\kappa$ descending). $\kappa$: Fleiss' Kappa. $K_{\text{eff}}$: Effective-K (Eq.~\ref{eq:effk}). SC: Self-Consistency baseline. $\Delta$: SICA $-$ SC (pp). {*}\,$p < 0.05$ (uncorrected; BH adj.\ $p = 0.042$, $m{=}6$); positive $\Delta$ values do not reach significance. multi-T $= T \in \{0.3, 0.7, 1.2\}$, 4 traces each. $^{\dag}$\,$\kappa$ computed in an earlier pipeline run; all other rows recomputed from per-problem vote distributions with answer labels normalized to canonical categories.}
 \label{tab:independence}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}llccrr@{}}
 \toprule
 Model & Condition & $\kappa$ & $K_{\text{eff}}$ & SC (\%) & $\Delta$ (pp) \\
@@ -717,7 +744,7 @@ Mistral-7B (s789) & FOLIO & 0.45 & 2.03 & 59.31 & $-$2.45 \\
 Mistral-7B (multi-T) & FOLIO & 0.43 & 2.11 & 57.84 & 0.00 \\
 Mistral-7B & PW-D5 & 0.19 & 3.94 & 39.33 & $\mathbf{-2.83}${*} \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \section{Cross-Model Kappa Analysis}
@@ -796,7 +823,14 @@ Contrastive & 74.0\% & 94.4\% & 9.2 & 0.0\% & 51.0\% & 62.7\% \\
 \paragraph{Per-trace constraint yield uniformity.}
 \label{app:yield-cv}
 
-Observation~1 assumes approximately uniform constraint yield per trace within each answer group. We verify this on Mistral-7B FOLIO ($K{=}12$, $n{=}204$). Per-problem yield CV (coefficient of variation across traces within each problem) has median $0.257$ and mean $0.319$; 64.2\% of problems fall below $\text{CV} = 0.3$, and 91.2\% below $0.5$, supporting the uniformity assumption. Majority-answer traces average $5.61$ constraints and minority-answer traces $6.04$ (Mann--Whitney $p = 5.2 \times 10^{-6}$); correct-answer traces average $5.41$ and incorrect $6.05$ ($p = 5.3 \times 10^{-11}$). Although statistically significant, the absolute difference (${\sim}0.6$ constraints, $< 12\%$) is insufficient to alter the argmax-preservation result: SICA and SC select the same answer on ${>}96\%$ of problems regardless of yield variation.
+Observation~1 assumes approximately uniform constraint yield per trace within each answer group. We verify this on Mistral-7B FOLIO ($K{=}12$, $n{=}204$). Per-problem yield CV (coefficient of variation across traces within each problem) has median $0.257$ and mean $0.319$; 64.2\% of problems fall below $\text{CV} = 0.3$, and 91.2\% below $0.5$, supporting the uniformity assumption (Figure~\ref{fig:cv-distribution}). Majority-answer traces average $5.61$ constraints and minority-answer traces $6.04$ (Mann--Whitney $p = 5.2 \times 10^{-6}$); correct-answer traces average $5.41$ and incorrect $6.05$ ($p = 5.3 \times 10^{-11}$). Although statistically significant, the absolute difference (${\sim}0.6$ constraints, $< 12\%$) is insufficient to alter the argmax-preservation result: SICA and SC select the same answer on ${>}96\%$ of problems regardless of yield variation. On the 18 problems with CV${>}0.5$, SICA and SC select the same answer on 18/18 (100\%), confirming that yield non-uniformity does not alter the degeneration pattern.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\columnwidth]{figures/fig_cv_distribution.pdf}
+\caption{Distribution of per-problem within-group CV for constraint yield (Mistral-7B, FOLIO, $n{=}204$). Median CV${=}0.26$ (red dashed); 64\% of problems have CV${\leq}0.3$. Five problems with CV${>}1.0$ (max $3.46$) are clipped for readability.}
+\label{fig:cv-distribution}
+\end{figure}
 
 \section{Error Categorization of Method-Level Interventions}
 \label{app:error-categorization}
@@ -873,7 +907,7 @@ DRC invokes NLI only when SC consensus falls below threshold $\tau$, avoiding un
 \small
 \caption{DRC on Mistral-7B ($K{=}12$, DeBERTa-large-mnli, $w{=}3$). $\tau{=}0.7$ recovers 83--90\% of full-combo gain at ${\sim}35\%$ NLI cost across both datasets.}
 \label{tab:drc}
-\setlength{\tabcolsep}{3pt}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}llcccc@{}}
 \toprule
 Dataset & Method & Acc.\ & NLI Calls & Cost & Recovery \\
@@ -886,7 +920,7 @@ Dataset & Method & Acc.\ & NLI Calls & Cost & Recovery \\
 & \textbf{DRC $\tau{=}0.7$} & \textbf{58.33\%} & \textbf{71/204} & \textbf{34.8\%} & \textbf{83.3\%} \\
 & Full combo & 58.82\% & 204/204 & 100\% & 100\% \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \section{Multi-Verifier NLI Results}
@@ -897,6 +931,7 @@ Dataset & Method & Acc.\ & NLI Calls & Cost & Recovery \\
 \small
 \caption{Cross-architecture NLI combo on ProofWriter depth-5 ($n{=}600$, Mistral-7B traces, SC $= 39.33\%$). Three NLI verifiers $\times$ three weight settings. {*}\,$p < 0.05$;\enspace{**}\,$p < 0.01$;\enspace{***}\,$p < 0.001$ (McNemar).}
 \label{tab:multi-nli}
+\setlength{\tabcolsep}{3pt}
 \begin{tabular}{@{}llrrl@{}}
 \toprule
 Verifier & Standalone & $w$ & $\Delta$ (pp) & $p$ \\
@@ -955,9 +990,6 @@ Across all six ProofWriter verifier-generator pairs at $w{=}3$ (three verifiers 
 
 \paragraph{Robustness check.} Including all nine conditions (three verifiers $\times$ three weight levels on Mistral-7B) yields Spearman $\rho = 0.836$ (exact permutation $p = 0.007$, $n = 9$), confirming that the monotonic trend is robust to the choice of weight parameter.
 
-\paragraph{Full NLI combo with BH correction.}
-\label{app:nli-combo-full}
-
 \begin{table}[h]
 \centering
 \small
@@ -992,13 +1024,12 @@ Generator & $w$ & Combo (\%) & $\Delta$ (pp) & $p_{\text{raw}}$ & $p_{\text{BH}}
 \end{tabular}}
 \end{table}
 
-\paragraph{BART-large-mnli cross-generator results.}
-
 \begin{table}[h]
 \centering
 \small
 \caption{Cross-generator NLI combo with BART-large-mnli verifier (46.17\% standalone) on ProofWriter depth-5 ($n{=}600$, $w{=}3$). Only Mistral-7B (below the verifier) gains significantly after BH correction.}
 \label{tab:bart-combo-full}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}lccrl@{}}
 \toprule
 Generator & SC (\%) & Combo (\%) & $\Delta$ (pp) & $p_{\text{BH}}$ \\
@@ -1008,16 +1039,15 @@ LLaMA-3.1-8B {\scriptsize (gap $-$26.33)} & 72.50 & 72.50 & $\pm$0.00 & --- \\
 Qwen2.5-14B {\scriptsize (gap $-$27.83)} & 74.00 & 75.50 & $+$1.50 & n.s. \\
 Qwen3-14B {\scriptsize (gap $-$39.66)} & 85.83 & 86.50 & $+$0.67 & n.s. \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
-
-\paragraph{RoBERTa-large-mnli cross-generator results.}
 
 \begin{table}[h]
 \centering
 \small
 \caption{Cross-generator NLI combo with RoBERTa-large-mnli verifier (37.67\% standalone) on ProofWriter depth-5 ($n{=}600$, $w{=}3$). Only Mistral-7B (marginally above the verifier) gains significantly after BH correction.}
 \label{tab:roberta-combo-full}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}lccrl@{}}
 \toprule
 Generator & SC (\%) & Combo (\%) & $\Delta$ (pp) & $p_{\text{BH}}$ \\
@@ -1027,17 +1057,15 @@ LLaMA-3.1-8B {\scriptsize (gap $-$34.83)} & 72.50 & 71.33 & $-$1.17 & n.s. \\
 Qwen2.5-14B {\scriptsize (gap $-$36.33)} & 74.00 & 74.17 & $+$0.17 & n.s. \\
 Qwen3-14B {\scriptsize (gap $-$48.16)} & 85.83 & 86.50 & $+$0.67 & n.s. \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
-
-\paragraph{FOLIO NLI combo results.}
-\label{app:folio-nli-combo}
 
 \begin{table}[h]
 \centering
 \small
 \caption{NLI combo on FOLIO ($n{=}204$) with DeBERTa-large-mnli verifier (49.51\% standalone). No condition reaches significance; all generators exceed the verifier's standalone accuracy, consistent with the capability-gap pattern. SC baselines match the cross-model ablation traces (Table~\ref{tab:cross-model-ablation}).}
 \label{tab:folio-nli-deberta}
+\setlength{\tabcolsep}{3pt}
 \begin{tabular}{@{}lcccrl@{}}
 \toprule
 Generator & $w$ & SC (\%) & Combo (\%) & $\Delta$ (pp) & $p$ \\
@@ -1066,6 +1094,7 @@ Generator & $w$ & SC (\%) & Combo (\%) & $\Delta$ (pp) & $p$ \\
 \small
 \caption{NLI combo on FOLIO ($n{=}204$) with BART-large-mnli verifier (47.06\% standalone). No positive improvement reaches significance; for Qwen2.5-14B the weak verifier produces a significant \emph{degradation} at $w{=}5$ ($p{=}.039$), consistent with the capability-gap pattern.}
 \label{tab:folio-nli-bart}
+\setlength{\tabcolsep}{3pt}
 \begin{tabular}{@{}lcccrl@{}}
 \toprule
 Generator & $w$ & SC (\%) & Combo (\%) & $\Delta$ (pp) & $p$ \\
@@ -1094,6 +1123,7 @@ Generator & $w$ & SC (\%) & Combo (\%) & $\Delta$ (pp) & $p$ \\
 \small
 \caption{NLI combo on FOLIO ($n{=}204$) with RoBERTa-large-mnli verifier (46.57\% standalone). Cross-verifier consistency: no positive gain reaches significance, and Qwen2.5-14B shows a significant \emph{degradation} at $w{=}5$ ($p{=}.012$)---the same capability-gap signature as BART.}
 \label{tab:folio-nli-roberta}
+\setlength{\tabcolsep}{3pt}
 \begin{tabular}{@{}lcccrl@{}}
 \toprule
 Generator & $w$ & SC (\%) & Combo (\%) & $\Delta$ (pp) & $p$ \\
@@ -1117,14 +1147,12 @@ Generator & $w$ & SC (\%) & Combo (\%) & $\Delta$ (pp) & $p$ \\
 \end{tabular}
 \end{table}
 
-\paragraph{LogiQA NLI combo results.}
-\label{app:logiqa-nli-combo}
-
 \begin{table}[h]
 \centering
 \small
 \caption{NLI combo on LogiQA ($n{=}200$) with DeBERTa-large-mnli verifier (26.50\% standalone, near the 25\% random baseline for 4-way classification). No condition reaches significance.}
 \label{tab:logiqa-nli-deberta}
+\setlength{\tabcolsep}{3pt}
 \begin{tabular}{@{}lcccrl@{}}
 \toprule
 Generator & $w$ & SC (\%) & Combo (\%) & $\Delta$ (pp) & $p$ \\
@@ -1153,6 +1181,7 @@ Generator & $w$ & SC (\%) & Combo (\%) & $\Delta$ (pp) & $p$ \\
 \small
 \caption{NLI combo on LogiQA ($n{=}200$) with BART-large-mnli verifier (33.00\% standalone). Near-random NLI accuracy yields no significant combo improvements.}
 \label{tab:logiqa-nli-bart}
+\setlength{\tabcolsep}{3pt}
 \begin{tabular}{@{}lcccrl@{}}
 \toprule
 Generator & $w$ & SC (\%) & Combo (\%) & $\Delta$ (pp) & $p$ \\
@@ -1181,6 +1210,7 @@ Generator & $w$ & SC (\%) & Combo (\%) & $\Delta$ (pp) & $p$ \\
 \small
 \caption{NLI combo on LogiQA ($n{=}200$) with RoBERTa-large-mnli verifier (31.50\% standalone). All three NLI verifiers produce the same null result on LogiQA.}
 \label{tab:logiqa-nli-roberta}
+\setlength{\tabcolsep}{3pt}
 \begin{tabular}{@{}lcccrl@{}}
 \toprule
 Generator & $w$ & SC (\%) & Combo (\%) & $\Delta$ (pp) & $p$ \\
@@ -1370,10 +1400,10 @@ Controlling for the trace set (excluding $T_{\text{ext}} = 0.3$, which uses a di
 \paragraph{Multi-seed replication.}
 \label{app:multi-seed}
 
-\begin{table}[h]
+\begin{table}[t!]
 \centering
 \small
-\caption{Multi-seed replication results across five model$\times$dataset conditions. Each row uses an independent seed with fresh traces ($K{=}12$, $T{=}0.7$). Mistral-7B$\times$FOLIO shows directionally unstable $\Delta$ ($+0.16 \pm 2.70$\,pp); all ProofWriter conditions show consistently negative $\Delta$ across all seeds ($p < .001$ for LLaMA-8B and Mistral-7B).}
+\caption{Multi-seed replication results across six model$\times$dataset conditions. Each row uses an independent seed with fresh traces ($K{=}12$, $T{=}0.7$). Mistral-7B$\times$FOLIO shows directionally unstable $\Delta$ ($+0.16 \pm 2.70$\,pp). Mistral-7B, LLaMA-8B, and Qwen2.5-14B show consistently negative $\Delta$ on ProofWriter ($p < .001$ for LLaMA-8B and Mistral-7B); Qwen3-14B shows negligible mixed-sign $\Delta$ ($+0.92 \pm 1.14$\,pp, all n.s.), consistent with its high SC baseline minimizing correctable errors (\S\ref{sec:discussion}).}
 \label{tab:multi-seed}
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}lrrrr@{}}
@@ -1418,18 +1448,26 @@ Mean $\pm$ SD & 71.67 $\pm$ 0.59 & 65.42 $\pm$ 1.14 & $-$6.25 $\pm$ 1.34 \\
 789 & 73.50 & 71.50 & $-$2.00 \\
 \midrule
 Mean $\pm$ SD & 73.21 $\pm$ 0.71 & 71.50 $\pm$ 0.55 & $-$1.71 $\pm$ 0.71 \\
+\midrule
+\multicolumn{4}{@{}l}{\textit{Qwen3-14B $\times$ ProofWriter ($n{=}600$)}} \\
+42  & 85.83 & 85.67 & $-$0.17 \\
+123 & 85.17 & 86.50 & $+$1.33 \\
+456 & 84.50 & 86.83 & $+$2.33 \\
+789 & 85.50 & 85.67 & $+$0.17 \\
+\midrule
+Mean $\pm$ SD & 85.25 $\pm$ 0.57 & 86.17 $\pm$ 0.59 & $+$0.92 $\pm$ 1.14 \\
 \bottomrule
 \end{tabular}}
 \vspace{2pt}
 {\footnotesize \textsuperscript{a}Original baseline (exp033) used no fixed seed and is excluded from seed statistics.}
 \end{table}
 
-On ProofWriter, all twelve Mistral-7B, LLaMA-8B, and Qwen2.5-14B seeds yield negative $\Delta$ (range $-0.83$ to $-7.50$\,pp), with all LLaMA-8B McNemar tests reaching $p < .001$. Qwen2.5-14B shows a moderate but consistent gap ($-1.71 \pm 0.71$\,pp across four seeds). The consistency across seeds and model scales confirms that negative $\Delta$ on ProofWriter is not an artifact of any single random sample.
+On ProofWriter, all twelve Mistral-7B, LLaMA-8B, and Qwen2.5-14B seeds yield negative $\Delta$ (range $-0.83$ to $-7.50$\,pp), with all LLaMA-8B McNemar tests reaching $p < .001$. The results reveal a capability-dependent gradient: LLaMA-8B $\Delta{=}-6.25$ $\to$ Mistral-7B $\Delta{=}-2.29$ $\to$ Qwen2.5-14B $\Delta{=}-1.71$ $\to$ Qwen3-14B $\Delta{=}+0.92$\,pp. Qwen3-14B is the sole exception: its 4-seed mean $\Delta$ is slightly positive ($+0.92 \pm 1.14$\,pp, all n.s.), reflecting the capability-modulated pattern discussed in \S\ref{sec:discussion}---models with SC baselines above 85\% leave few correctable errors for SICA to exploit. The consistency across seeds confirms that the sign of $\Delta$ on ProofWriter is not an artifact of any single random sample but reflects model-level reasoning capacity.
 
 \subsection{Sub-population Analysis}
 \label{app:subpopulation}
 
-\begin{table}[h]
+\begin{table}[t!]
 \centering
 \small
 \caption{SICA vs.\ SC accuracy by gold-label type (Mistral-7B). Corrected SC baseline uses alphabetical tiebreaking. $\Delta$\,pp = SICA $-$ SC. $p$-values from exact McNemar test (two-sided).}
@@ -1454,7 +1492,7 @@ On ProofWriter, all twelve Mistral-7B, LLaMA-8B, and Qwen2.5-14B seeds yield neg
 \end{tabular}}
 \end{table}
 
-\begin{table}[h]
+\begin{table}[t!]
 \centering
 \small
 \caption{SICA vs.\ SC accuracy by extracted constraint count tertile (Mistral-7B). Corrected SC baseline (alphabetical tiebreaking). Constraint counts are unique deduplicated constraints per problem.}
@@ -1498,6 +1536,11 @@ Our results do not imply that neuro-symbolic methods are inherently flawed---the
 
 \paragraph{Test-time scaling implications.}
 Vote diversity decreases with model capability: $K_\text{eff}$ drops from 3.94 (Mistral-7B on ProofWriter) to 1.09 (Qwen3-14B thinking mode). This creates a fundamental tension for o1/R1-style scaling \citep{guo2025deepseekr1}: longer reasoning chains produce more coherent but less diverse traces, reducing the marginal value of additional samples. Our Process-$\kappa$ analysis (\S\ref{sec:process-kappa}) reveals that this homogenization operates at the reasoning-process level, not just answer level---traces that disagree on final answers still share 69\% of their reasoning structure. Cross-architecture ensembles offer a path forward, but the capability-gap condition (\S\ref{sec:cross-arch}) implies that the verifier must be genuinely complementary, not just different.
+
+\paragraph{Semantic evaluation remark.}
+\label{app:semantic-remark}
+Observation~1 assumes degeneration and source attribution. Under \emph{semantic} evaluation, the equivalence additionally requires \emph{answer alignment}: $P(c_i \text{ supports } a_i) \geq P(c_i \text{ supports } a')$ for $a' \neq a_i$, which is structurally motivated and empirically validated ($\mathrm{BR} \in [1.66,\, 4.97]$; Table~\ref{tab:frontier-scb}), but could fail if $f$ systematically extracted premises contradicting their source trace's conclusion.
+Since Observation~1 shows SICA reduces to majority vote under degeneration, $\mathrm{BR} \geq 1$ follows from the trace-count geometry; the empirical BR consistently exceeds this floor ($1.66\times$--$4.97\times$; Table~\ref{tab:frontier-scb}), reflecting both base-rate effects and extraction alignment.
 
 \paragraph{SCB diagnostic toolkit.}
 \label{app:diagnostic-toolkit}

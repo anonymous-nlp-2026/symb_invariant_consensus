@@ -6,7 +6,7 @@
 \label{sec:condorcet}
 \label{sec:effective-k}
 
-Self-Consistency (SC) \citep{wang2023sc} samples $K$ reasoning traces and selects the majority answer. Under correlated traces (Fleiss' $\kappa$ \citep{fleiss1971kappa}), effective sample size reduces to
+Self-Consistency (SC) \citep{wang2023sc} samples $K$ reasoning traces and selects the majority answer. Under correlated traces (Fleiss' $\kappa$ \citep{fleiss1971kappa}), the effective ensemble size $K_\text{eff}$ is
 \begin{equation}
 \label{eq:effk}
 K_{\text{eff}} = K \,/\, [1 + (K{-}1) \cdot \kappa]
@@ -43,7 +43,7 @@ equivalent to majority voting. We show in \S\ref{sec:confirmation-bias} that thi
 
 \paragraph{The $C_0$ diagnostic.} The multi-candidate rate $C_0 = |\{q : |\mathcal{A}(q)| > 1\}| / |\mathcal{Q}|$ is a zero-cost diagnostic: $C_0 < 5\%$ means SICA reduces to SC. $\alpha = 0.5$ is not critical (${\pm}0.49$\,pp across $\alpha \in [0, 1]$).
 
-\paragraph{Bias ratio.} We quantify extraction bias via the \emph{bias ratio}:
+\paragraph{Bias ratio.} We quantify extraction bias via the \emph{bias ratio} (BR):
 \begin{equation}\label{eq:mirage}
 \text{BR}(M,T) = \frac{P(c \text{ supports } a_M \mid a_M \neq a^*)}{P(c \text{ supports } a^* \mid a_M \neq a^*)},
 \end{equation}
@@ -53,7 +53,7 @@ where $c$ is a self-extracted constraint, $a_M$ the model's majority answer, and
 \label{sec:exp-setup}
 
 \looseness=-1
-\paragraph{Models.} Qwen2.5-14B-Instruct, Qwen2.5-7B-Instruct, Qwen3-14B (non-thinking mode)~\citep{yang2024qwen25}, Mistral-7B-Instruct-v0.3~\citep{jiang2023mistral}, LLaMA-3.1-8B-Instruct~\citep{dubey2024llama3}, and QwQ-32B~\citep{qwen2024qwq} (7B--32B). We also evaluate the universality of symbolic confirmation bias on six additional models: gpt-4o uses self-extraction via API; four frontier models (gpt-4.1, gpt-5.5, o3, Gemini-2.5-Pro) use cross-model extraction where Mistral-7B extracts constraints from target traces; DeepSeek-R1-Distill-Qwen-8B likewise uses Mistral-7B cross-extraction (Table~\ref{tab:frontier-scb}).
+\paragraph{Models.} Qwen2.5-14B-Instruct, Qwen2.5-7B-Instruct, Qwen3-14B (non-thinking mode)~\citep{yang2024qwen25}, Mistral-7B-Instruct-v0.3~\citep{jiang2023mistral}, LLaMA-3.1-8B-Instruct~\citep{dubey2024llama3}, and QwQ-32B~\citep{qwen2024qwq} (7B--32B). We also evaluate the universality of symbolic confirmation bias on six additional models: gpt-4o uses self-extraction via API; four frontier models (gpt-4.1, gpt-5.5, o3, Gemini-2.5-Pro) use cross-model extraction where Mistral-7B extracts constraints from target traces; DeepSeek-R1-Distill-Qwen-8B likewise uses Mistral-7B cross-extraction (Appendix Table~\ref{tab:frontier-scb}).
 
 \paragraph{Datasets.} FOLIO~\citep{han2022folio} ($n{=}204$, gold logical annotations), ProofWriter depth-5~\citep{tafjord2021proofwriter} ($n{=}600$), LogiQA~\citep{liu2020logiqa} ($n{=}200$), StrategyQA~\citep{geva2021strategyqa} ($n{=}200$). GSM8K ($n{=}30$) and AIME 2024 ($n{=}22$) probe the degenerate regime ($C_0 < 5\%$).
 
