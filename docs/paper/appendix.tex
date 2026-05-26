@@ -6,10 +6,7 @@ SICA uses domain-specific prompt templates for constraint extraction: one for ma
 \paragraph{System Prompt.}\leavevmode
 
 \begin{lstlisting}
-You are a constraint extraction tool. Output ONLY
-valid JSON. Do NOT solve problems, reason about
-correctness, or think step-by-step. Extract
-constraints from the given trace exactly as stated.
+You are a constraint extraction tool. Output ONLY valid JSON. Do NOT solve problems, reason about correctness, or think step-by-step. Extract constraints from the given trace exactly as stated.
 \end{lstlisting}
 
 \paragraph{Mathematical Constraint Extraction (EXTRACTION\_PROMPT).}
@@ -17,39 +14,25 @@ constraints from the given trace exactly as stated.
 Used for GSM8K and AIME datasets. The placeholder \texttt{\{trace\}} is replaced with the reasoning trace at runtime.
 
 \begin{lstlisting}
-Extract mathematical constraints from this reasoning
-trace as a JSON object.
+Extract mathematical constraints from this reasoning trace as a JSON object.
 
 Rules:
 - type: "equation", "inequality", or "predicate"
 - expression: human-readable, e.g. "x + y == 14"
-- z3_formula: a single comparison expression in
-  Python Z3 syntax
-- source_step: step number where the constraint
-  appears
+- z3_formula: a single comparison expression in Python Z3 syntax
+- source_step: step number where the constraint appears
 - Use variable names from the trace
 
 z3_formula MUST follow these rules:
-- Allowed operators: ==, !=, <, >, <=, >=, +, -, *,
-  /, **, %
-- Use individual named variables: a1, a2, a3...
-  NOT arrays a[1] or sets A
-- Expand all sums explicitly:
-  "a1 + a2 + a3 == 55" NOT "sum([a1,a2,a3])"
-- NO Python builtins: sum(), len(), max(), min(),
-  list(), set(), range(), int()
-- Each z3_formula must be exactly ONE comparison
-  (==, !=, <, >, <=, >=)
-- For multiple values, write separate constraints
-  for each
+- Allowed operators: ==, !=, <, >, <=, >=, +, -, *, /, **, %
+- Use individual named variables: a1, a2, a3... NOT arrays a[1] or sets A
+- Expand all sums explicitly: "a1 + a2 + a3 == 55" NOT "sum([a1,a2,a3])"
+- NO Python builtins: sum(), len(), max(), min(), list(), set(), range(), int()
+- Each z3_formula must be exactly ONE comparison (==, !=, <, >, <=, >=)
+- For multiple values, write separate constraints for each
 
 Output ONLY the JSON below, nothing else:
-{"constraints": [{"type": "equation",
-  "expression": "x + y == 14",
-  "z3_formula": "x + y == 14",
-  "source_step": 1}],
- "answer": "final_answer",
- "variables": ["x", "y"]}
+{"constraints": [{"type": "equation", "expression": "x + y == 14", "z3_formula": "x + y == 14", "source_step": 1}], "answer": "final_answer", "variables": ["x", "y"]}
 
 Trace:
 {trace}
@@ -60,36 +43,25 @@ Trace:
 Used for ProofWriter and FOLIO datasets.
 
 \begin{lstlisting}
-IMPORTANT: You are an EXTRACTION tool, NOT a problem
-solver.
+IMPORTANT: You are an EXTRACTION tool, NOT a problem solver.
 - Do NOT re-solve or re-reason about the problem.
-- Do NOT verify whether the trace's reasoning is
-  correct.
-- ONLY extract the logical constraints that are
-  explicitly stated or used in the trace below.
+- Do NOT verify whether the trace's reasoning is correct.
+- ONLY extract the logical constraints that are explicitly stated or used in the trace below.
 - Output ONLY the JSON object, nothing else.
 
-Extract logical constraints from this reasoning trace
-about a logic problem.
+Extract logical constraints from this reasoning trace about a logic problem.
 
-The problem has facts (base assertions), rules
-(grounded implications), and derived conclusions.
-Convert each into a Z3 boolean formula.
+The problem has facts (base assertions), rules (grounded implications), and derived conclusions. Convert each into a Z3 boolean formula.
 
 Variable naming:
-- Unary property: property_entity
-  (e.g., kind_anne, red_charlie, round_fiona)
-- Binary relation: relation_subject_object
-  (e.g., eats_bear_squirrel, likes_lion_cat)
+- Unary property: property_entity (e.g., kind_anne, red_charlie, round_fiona)
+- Binary relation: relation_subject_object (e.g., eats_bear_squirrel, likes_lion_cat)
 - Use lowercase with underscores only
 
 Constraint types:
-- "fact": a given assertion,
-  e.g., kind_anne == True
-- "rule": a grounded implication over specific
-  entities, e.g., Implies(kind_anne, nice_anne)
-- "derived": an inferred conclusion from facts +
-  rules, e.g., nice_anne == True
+- "fact": a given assertion, e.g., kind_anne == True
+- "rule": a grounded implication over specific entities, e.g., Implies(kind_anne, nice_anne)
+- "derived": an inferred conclusion from facts + rules, e.g., nice_anne == True
 
 Z3 operators:
 - Implies(a, b) for if-then rules
@@ -99,12 +71,7 @@ Z3 operators:
 - == True / == False for boolean assertions
 
 Output ONLY the JSON below, nothing else:
-{"constraints": [{"type": "fact",
-  "expression": "kind(anne)",
-  "z3_formula": "kind_anne == True",
-  "source_step": 1}],
- "answer": "True or False or Unknown",
- "variables": ["kind_anne"]}
+{"constraints": [{"type": "fact", "expression": "kind(anne)", "z3_formula": "kind_anne == True", "source_step": 1}], "answer": "True or False or Unknown", "variables": ["kind_anne"]}
 
 Trace:
 {trace}
@@ -198,7 +165,7 @@ We define the \textit{Conditional Correction Ratio} (CCR) to summarize verifier-
 \label{eq:cil}
 \text{CCR}(V, G) = \log \frac{P(V \text{ correct} \mid G \text{ wrong})}{P(V \text{ correct} \mid G \text{ correct})}.
 \end{equation}
-$\text{CCR} > 0$ means $V$ preferentially corrects $G$'s errors; $\text{CCR} < 0$ indicates shared bias. CCR links our findings: (1)~SCB corresponds to $\text{CCR}(\text{self}, G) \approx 0$; (2)~Finding~2 predicts $\text{CCR}(V, G) > 0$ when $V$ is independent and capable.
+$\text{CCR} > 0$ means $V$ preferentially corrects $G$'s errors; $\text{CCR} < 0$ indicates shared bias. CCR links our findings: (1)~SCB corresponds to $\text{CCR}(\text{self}, G) \approx 0$; (2)~the cross-architecture escape (\S\ref{sec:cross-arch}) predicts $\text{CCR}(V, G) > 0$ when $V$ is independent and capable.
 
 \paragraph{Empirical CCR across verifier--generator pairs.}
 Table~\ref{tab:cil_empirical} reports CCR for eight verifier--generator--dataset conditions, sorted by CCR descending. All three cross-architecture NLI pairs on ProofWriter yield $\text{CCR} > 0$ (verifier preferentially corrects generator errors), while all three same-model SICA conditions yield $\text{CCR} < 0$ (shared bias). CCR correlates with combo gain: Spearman $\rho = 0.839$, 95\% bootstrap CI $[0.338, 0.990]$; LOO-robust (min $p = 0.014$). Four of eight conditions share the DeBERTa verifier, yielding effective $n < 10$; results should be interpreted as a consistent pattern rather than a precise effect size.
@@ -408,7 +375,7 @@ Random-weight & 75.87 & 764\,/\,804 \\
 \begin{table}[h]
 \centering
 \small
-\caption{MAX-SAT vs.\ count-only agreement across constraint weight $\alpha \in [0,1]$ on FOLIO ($n = 204$). Mistral-7B (BR $= 4.97\times$, seed 42); Qwen2.5-14B (BR $= 3.85\times$, seed 123). $\alpha{=}0$: pure Z3 satisfiability (no source-attribution); $\alpha{=}1$: full source-attribution penalty. Agreement $\geq 99\%$ at all $\alpha$ including endpoints, confirming vacuity is weight-insensitive.}
+\caption{MAX-SAT vs.\ count-only agreement across constraint weight $\alpha \in [0,1]$ on FOLIO ($n = 204$). Mistral-7B (BR $= 4.97\times$, seed 42); Qwen2.5-14B (BR $= 3.93\times$, seed 123). $\alpha{=}0$: pure Z3 satisfiability (no source-attribution); $\alpha{=}1$: full source-attribution penalty. Agreement $\geq 99\%$ at all $\alpha$ including endpoints, confirming vacuity is weight-insensitive.}
 \label{tab:alpha-ablation}
 \begin{tabular}{@{}crr@{}}
 \toprule
@@ -428,6 +395,8 @@ $\alpha$ & Mistral Agr.\ (\%) & Qwen2.5 Agr.\ (\%) \\
 
 \section{Remediation Strategy Details}
 \label{app:remediation}
+
+Table~\ref{tab:remediation} reports nine prompt-level strategies; Table~\ref{tab:method_interventions} reports three method-level interventions. Figure~\ref{fig:interventions-summary} visualizes all 27 strategies.
 
 \begin{figure*}[t]
 \centering
@@ -464,7 +433,7 @@ Disc.\ filtering$^f$ & Filtering & 0.00 & 803/804 agree w/ SICA \\
 \begin{table}[h]
 \centering
 \small
-\caption{Method-level interventions on Mistral-7B with McNemar's paired test. All produce neutral-to-catastrophic results. ICG shows two FOLIO seeds; $p$ for the first. {*}{*}{*}\,$p < 0.001$; {*}{*}\,$p < 0.01$.}
+\caption{Method-level interventions on Mistral-7B with McNemar's paired test. All produce neutral-to-catastrophic results. Independent Constraint Generation (ICG) shows two FOLIO seeds; $p$ for the first. {*}{*}{*}\,$p < 0.001$; {*}{*}\,$p < 0.01$.}
 \label{tab:method_interventions}
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}ll rc rc@{}}
@@ -483,6 +452,8 @@ Debate & Role diversity & $\mathbf{-18.63}$ & ${<}.001$ & $\mathbf{-23.00}$ & ${
 
 \section{Additional Intervention Results}
 \label{app:additional-interventions}
+
+Table~\ref{tab:additional_interventions} reports the remaining 15 strategies beyond the 12 in Appendix~\ref{app:remediation}.
 
 \begin{table*}[h]
 \centering
@@ -514,12 +485,7 @@ Debate & Role diversity & $\mathbf{-18.63}$ & ${<}.001$ & $\mathbf{-23.00}$ & ${
 {\footnotesize All experiments on Mistral-7B FOLIO ($n{=}204$) unless noted. $^\dagger$\,Oscillates without convergence; net effect $\approx 0$. $^*$\,Accuracy gain only at reduced coverage (diagnostic value, not a general improvement). Methods 1--12 are reported in Table~\ref{tab:remediation} and Table~\ref{tab:method_interventions}.}
 \end{table*}
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.85\columnwidth]{figures/fig3_process_kappa_scatter.pdf}
-\caption{Answer agreement vs.\ CoT cosine similarity (Mistral-7B, FOLIO, $n{=}204$). Flat regression ($r = -0.06$, $p = 0.36$); stronger models show significant positive correlation ($r = +0.24$, Qwen-14B; Table~\ref{tab:cross-model-process}).}
-\label{fig:process-kappa}
-\end{figure}
+Figure~\ref{fig:process-kappa} (main text) visualizes the process--answer independence gap.
 
 
 \section{Extraction Error Taxonomy}
@@ -542,12 +508,12 @@ Figure~\ref{fig:k-sensitivity} shows SICA $\Delta$ as a function of the number o
 
 The apparent $\Delta$ peak at $K = 12$ is confounded with SC baseline. SICA absolute accuracy plateaus at 59.31\% (121/204) for $K \geq 12$: identical at $K = 12$ and $K = 20$. The $\Delta$ variation across these settings is driven primarily by SC fluctuations rather than by SICA improvement. $K = 12$ produces a relatively low SC (55.88\%), placing it in the intermediate-SC region; $K = 8$ (SC $= 58.33\%$) and $K = 20$ (SC $= 57.35\%$) have higher baselines, compressing $\Delta$ even though SICA accuracy does not change for $K \geq 12$. Additional traces beyond $K = 12$ provide no benefit to SICA absolute performance, consistent with the constraint quality bottleneck. The $K = 12$ $\Delta$ captures only 25.0\% of the oracle ceiling ($+13.73$\,pp).
 
-\begin{figure}[h]
+\begin{figure*}[t]
 \centering
-\includegraphics[width=\columnwidth]{f3_k_sensitivity}
+\includegraphics[width=0.75\textwidth]{f3_k_sensitivity}
 \caption{SICA $\Delta$ (pp) vs.\ number of traces $K$ for Mistral-7B on FOLIO ($n = 204$, default seed, $T = 0.7$). Non-monotonic pattern: SICA accuracy plateaus at 59.31\% for $K \geq 12$; the apparent $\Delta$ peak at $K = 12$ partly reflects a relatively low SC baseline (55.88\%) at that point. Error bars: 95\% bootstrap CI.}
 \label{fig:k-sensitivity}
-\end{figure}
+\end{figure*}
 
 \subsection{Temperature Sensitivity}
 
@@ -607,7 +573,7 @@ The regime-dependent pattern in Table~\ref{tab:main_results} reflects three dist
 \section{Cross-Model Confirmation Bias}
 \label{app:cross-model-bias}
 
-Table~\ref{tab:cross-model-bias} reports MaxSAT-weighted confirmation bias metrics across three model families on FOLIO ($n = 204$). Weighted bias ratio and wrong-supporting constraint percentage both decrease with model capability, while SICA's accuracy effect shifts from positive (Mistral, intermediate-SC regime) to negative (LLaMA, high-SC regime). Raw bias ratios ($4.97\times$, $3.85\times$, $2.88\times$) are reported in \S\ref{sec:confirmation-bias}. LLaMA weighted BR CI: [2.19, 3.28].
+Table~\ref{tab:cross-model-bias} reports MaxSAT-weighted confirmation bias metrics across three model families on FOLIO ($n = 204$). Weighted bias ratio and wrong-supporting constraint percentage both decrease with model capability, while SICA's accuracy effect shifts from positive (Mistral, intermediate-SC regime) to negative (LLaMA, high-SC regime). Raw bias ratios ($4.97\times$, $3.93\times$, $3.87\times$) are reported in \S\ref{sec:confirmation-bias}. LLaMA raw BR CI: [3.11, 4.98] (4/12 traces).
 
 \begin{table}[h]
 \centering
@@ -627,31 +593,7 @@ LLaMA-3.1-8B & $2.66\times$ & 72.7 & $-$4.41 \\
 
 \paragraph{Frontier model universality.}
 \label{app:frontier-scb}
-Table~\ref{tab:frontier-scb} extends confirmation bias analysis to nine models spanning 7B open-source to frontier closed-source. All models exhibit $\text{BR} > 1$ (range: $1.66$--$4.97\times$). Extraction context varies: open-source models use self-extraction (the model extracts constraints from its own traces); frontier models use cross-model extraction (Mistral-7B extracts FOL from the target model's traces), as closed-source APIs do not expose internal representations suitable for direct symbolic extraction.
-
-\begin{table}[h]
-\centering
-\small
-\setlength{\tabcolsep}{3pt}
-\caption{Symbolic confirmation bias across nine models on FOLIO ($n = 204$). BR: mean per-problem bias ratio. $n_\text{err}$: number of incorrect instances on which BR is computed. $\Delta$: SICA $-$ SC (pp). Ext.: $^a$self-extraction; $^b$cross-model (Mistral-7B extracts FOL from target traces). $^*$Interim ($n = 95/204$). $^\dagger$8 API-failure questions excluded ($n = 196$). All models exhibit $\text{BR} > 1$; BR estimates for high-accuracy models ($n_\text{err} < 40$) have wider confidence intervals; Gemini ($n_\text{err} \approx 12$) should be interpreted with particular caution. Process-level similarity ($\kappa_{\text{proc}}$) ranges from $0.25$ (R1-Distill) to $0.79$ (gpt-4o/4.1/Gemini); see Table~\ref{tab:cross-model-process}.}
-\label{tab:frontier-scb}
-\resizebox{\columnwidth}{!}{\begin{tabular}{@{}llrrrrl@{}}
-\toprule
-Model & Ext. & SC (\%) & $n_\text{err}$ & BR & $\Delta$ (pp) \\
-\midrule
-Mistral-7B & $^a$ & 55.88 & 90 & 4.97 & 0.00 \\
-LLaMA-8B & $^a$ & \textrm{---} & \textrm{---} & 2.88 & \textrm{---} \\
-Qwen-14B & $^a$ & 75.98 & 49 & 3.85 & $-$0.49 \\
-\addlinespace
-R1-Distill-8B & $^b$ & 74.51 & 52 & 2.92 & $+$2.45 \\
-gpt-4o & $^a$ & 76.96 & 47 & 2.65 & $-$1.96 \\
-gpt-4.1 & $^b$ & 82.84 & 35 & 2.70 & $-$1.47 \\
-gpt-5.5 & $^b$ & 84.31 & 32 & 3.48 & $+$0.49 \\
-o3$^\dagger$ & $^b$ & 82.65 & 34 & 1.66 & 0.00 \\
-Gemini-2.5-Pro$^*$ & $^b$ & 87.37 & 12 & 2.79 & $-$1.05 \\
-\bottomrule
-\end{tabular}}
-\end{table}
+Table~\ref{tab:frontier-scb} (main text) reports confirmation bias across nine models spanning 7B open-source to frontier closed-source. All models exhibit $\text{BR} > 1$ ($1.66$--$4.97\times$). Open-source models use self-extraction; frontier models use cross-model extraction (Mistral-7B extracts FOL from target traces), as closed-source APIs do not expose internal representations suitable for direct symbolic extraction. BR estimates for high-accuracy models ($n_\text{err} < 40$) have wider confidence intervals; Gemini ($n_\text{err} \approx 12$) should be interpreted with particular caution. Process-level similarity ($\kappa_{\text{proc}}$) ranges from $0.25$ (R1-Distill) to $0.79$ (gpt-4o/4.1/Gemini); see Table~\ref{tab:cross-model-process}.
 
 \paragraph{ProcessSim definition.}
 \label{app:process-sim}
@@ -750,7 +692,7 @@ Mistral-7B & PW-D5 & 0.19 & 3.94 & 39.33 & $\mathbf{-2.83}${*} \\
 \section{Cross-Model Kappa Analysis}
 \label{app:cross-model-kappa}
 
-Table~\ref{tab:cross_model_kappa} compares trace independence across three model families on the same benchmarks. On FOLIO ($n = 204$), all four models produce $\kappa \geq 0.41$: LLaMA-3.1-8B ($\kappa = 0.41$), Mistral-7B ($\kappa = 0.46$), Qwen2.5-7B ($\kappa = 0.66$), and Qwen2.5-14B ($\kappa = 0.74$). The bottleneck is architecture-independent---no family escapes the correlation floor. Within the Qwen family, $\kappa$ increases from 0.66 (7B) to 0.74 (14B), but Mistral-7B (7B) and LLaMA-3.1-8B (8B) differ by $\Delta\kappa = 0.05$ despite belonging to different families, suggesting that cross-family variation ($\Delta\kappa$ up to 0.20 at similar scale) exceeds within-family scale effects ($\Delta\kappa = 0.08$). Disentangling scale from architecture requires controlled same-family experiments across $\geq$3 scales.
+Table~\ref{tab:cross_model_kappa} compares trace independence across three model families on the same benchmarks. On FOLIO ($n = 204$), all four models produce $\kappa \geq 0.41$: LLaMA-3.1-8B ($\kappa = 0.41$), Mistral-7B ($\kappa = 0.46$), Qwen2.5-7B ($\kappa = 0.66$), and Qwen2.5-14B ($\kappa = 0.74$). The bottleneck is architecture-independent; no family escapes the correlation floor. Within the Qwen family, $\kappa$ increases from 0.66 (7B) to 0.74 (14B), but Mistral-7B (7B) and LLaMA-3.1-8B (8B) differ by $\Delta\kappa = 0.05$ despite belonging to different families, suggesting that cross-family variation ($\Delta\kappa$ up to 0.20 at similar scale) exceeds within-family scale effects ($\Delta\kappa = 0.08$). Disentangling scale from architecture requires controlled same-family experiments across $\geq$3 scales.
 
 \begin{table}[h]
 \centering
@@ -776,7 +718,7 @@ Mistral-7B & PW-D5 & 0.19 & 3.94 & 39.33 \\
 \section{Cross-Model Process-Level Independence}
 \label{app:cross-model-process}
 
-Table~\ref{tab:cross-model-process} extends the process-level independence analysis (\S\ref{sec:process-kappa}) to four model families on FOLIO ($n = 204$). Mean pairwise cosine similarity of TF-IDF trace representations exceeds answer-level $\kappa$ in every family, but the gap is model-strength dependent: it narrows from $0.31$ (LLaMA) and $0.23$ (Mistral) to $0.02$ (Qwen-14B). For weaker models ($r \approx 0$), answer diversity does not reflect reasoning diversity---process-convergent but answer-divergent trace pairs constitute 9.5\% of all pairs on Mistral-7B versus 2.5--3.2\% on other families. For stronger models ($r \approx 0.23$, $p \leq 0.001$), process and answer agreement align, and answer-level $\kappa$ already captures the bottleneck. Process-$\kappa$ thus provides a crucial additional diagnostic specifically for weaker models, where answer-level metrics underestimate reasoning homogeneity.
+Table~\ref{tab:cross-model-process} extends the process-level independence analysis (\S\ref{sec:process-kappa}) to four model families on FOLIO ($n = 204$). Mean pairwise cosine similarity of TF-IDF trace representations exceeds answer-level $\kappa$ in every family, but the gap is model-strength dependent: it narrows from $0.31$ (LLaMA) and $0.23$ (Mistral) to $0.02$ (Qwen-14B). For weaker models ($r \approx 0$), answer diversity does not reflect reasoning diversity; process-convergent but answer-divergent trace pairs constitute 9.5\% of all pairs on Mistral-7B versus 2.5--3.2\% on other families. For stronger models ($r \approx 0.23$, $p \leq 0.001$), process and answer agreement align, and answer-level $\kappa$ already captures the bottleneck. Process-$\kappa$ thus provides a crucial additional diagnostic specifically for weaker models, where answer-level metrics underestimate reasoning homogeneity.
 
 \begin{table}[h]
 \centering
@@ -801,7 +743,7 @@ Qwen2.5-14B & 0.766 & 0.744 & 0.022 & $+$0.244 & ${<}$0.001{*}{*}{*} & 2.5 \\
 \section{Constraint Quality Across Methods}
 \label{app:constraint-quality}
 
-Table~\ref{tab:constraint_quality} compares constraint quality metrics across the three method-level interventions on Mistral-7B FOLIO ($n = 204$). Standard SICA extracts from reasoning traces and achieves the highest parse rate (97.1\%) but also the highest redundancy (42.9\%): nearly half of all constraints are syntactic duplicates across the 12 traces, quantifying the co-sourcing effect of same-model generation. ICG generates constraints directly from the problem statement without trace conditioning. Its lower parse rate (74.6\%) reflects the difficulty of standalone formalization at the 7B scale, though successfully parsed constraints compile at a higher rate (99.4\% vs.\ 96.5\%). ICG produces fewer unique constraints per question (24.9 vs.\ 39.3) with lower redundancy (32.3\%), consistent with the absence of trace-level repetition. Contrastive scoring generates pro and con constraint sets for each candidate answer. The format yields far fewer unique constraints per question (9.2) with zero redundancy (each pro/con pair is structurally distinct), but 62.7\% of constraints are trivially satisfied by Z3---they impose no logical tension and cannot discriminate between candidates. Only 51.0\% of Contrastive constraints are discriminative, compared to 81.4\% for standard SICA and 77.0\% for ICG.
+Table~\ref{tab:constraint_quality} compares constraint quality metrics across the three method-level interventions on Mistral-7B FOLIO ($n = 204$). Standard SICA extracts from reasoning traces and achieves the highest parse rate (97.1\%) but also the highest redundancy (42.9\%): nearly half of all constraints are syntactic duplicates across the 12 traces, quantifying the co-sourcing effect of same-model generation. ICG generates constraints directly from the problem statement without trace conditioning. Its lower parse rate (74.6\%) reflects the difficulty of standalone formalization at the 7B scale, though successfully parsed constraints compile at a higher rate (99.4\% vs.\ 96.5\%). ICG produces fewer unique constraints per question (24.9 vs.\ 39.3) with lower redundancy (32.3\%), consistent with the absence of trace-level repetition. Contrastive scoring generates pro and con constraint sets for each candidate answer. The format yields far fewer unique constraints per question (9.2) with zero redundancy (each pro/con pair is structurally distinct), but 62.7\% of constraints are trivially satisfied by Z3; they impose no logical tension and cannot discriminate between candidates. Only 51.0\% of Contrastive constraints are discriminative, compared to 81.4\% for standard SICA and 77.0\% for ICG.
 
 \begin{table}[h]
 \centering
@@ -837,11 +779,11 @@ Observation~1 assumes approximately uniform constraint yield per trace within ea
 
 We categorize discordant predictions (where the method and SC disagree) for Debate and Contrastive on FOLIO ($n = 204$) to understand why these interventions degrade accuracy.
 
-\paragraph{Debate discordant analysis.} Debate produces 60 correct$\to$wrong flips and 22 wrong$\to$correct flips on FOLIO. Answer-type breakdown reveals that False-labeled questions are most vulnerable: 82.8\% of False questions that SC answers correctly are flipped by Debate, compared to 63.9\% for True and 25.5\% for Unknown. Counterintuitively, failures concentrate not where debate breaks down but where it succeeds most thoroughly: discordant questions average 2.93 effective debate rounds (proposer-critic exchanges producing substantive updates) versus 2.52 for concordant ones. More extensive same-model debate produces more confident but incorrect constraints, consistent with the independence limitation---the critic draws on the same model distribution as the proposer, reinforcing shared biases rather than correcting them.
+\paragraph{Debate discordant analysis.} Debate produces 60 correct$\to$wrong flips and 22 wrong$\to$correct flips on FOLIO. Answer-type breakdown reveals that False-labeled questions are most vulnerable: 82.8\% of False questions that SC answers correctly are flipped by Debate, compared to 63.9\% for True and 25.5\% for Unknown. Counterintuitively, failures concentrate not where debate breaks down but where it succeeds most thoroughly: discordant questions average 2.93 effective debate rounds (proposer-critic exchanges producing substantive updates) versus 2.52 for concordant ones. More extensive same-model debate produces more confident but incorrect constraints, consistent with the independence limitation: the critic draws on the same model distribution as the proposer, reinforcing shared biases rather than correcting them.
 
 \paragraph{Contrastive discordant analysis.} Contrastive produces 34 discordant questions on FOLIO. All 34 produced non-degenerate scores (both pro and con constraint sets non-empty), compared to 20.1\% degenerate scores in the full sample. This indicates that scoring failures on discordant questions stem from systematic pro-bias rather than missing constraints. Among discordant questions, 97.1\% contain negation words in the problem statement versus 76.5\% in the full sample, suggesting that negation-bearing problems are particularly susceptible to pro-constraint imbalance. The average pro/con score ratio is 1.0 for discordant questions versus 0.68 for the full sample: the method generates balanced-looking scores that mask directional errors.
 
-\paragraph{Cross-method overlap.} Of the 79 unique questions on which either method disagrees with SC, only 15 overlap between Debate and Contrastive (Jaccard index $= 0.19$). All 15 shared discordant questions contain negation words. The low overlap confirms that the two methods attack different vulnerability types---Debate through extended same-model argumentation that amplifies confident errors, Contrastive through pro-bias in constraint generation---while sharing a common root cause in correlated same-model voting: both methods rely on the same model's output distribution and cannot introduce genuinely independent signal.
+\paragraph{Cross-method overlap.} Of the 79 unique questions on which either method disagrees with SC, only 15 overlap between Debate and Contrastive (Jaccard index $= 0.19$). All 15 shared discordant questions contain negation words. The low overlap confirms that the two methods attack different vulnerability types (Debate through extended same-model argumentation that amplifies confident errors, Contrastive through pro-bias in constraint generation) while sharing a common root cause in correlated same-model voting: both methods rely on the same model's output distribution and cannot introduce genuinely independent signal.
 
 
 \section{TOST Equivalence Tests}
@@ -900,7 +842,7 @@ Mistral $\times$ SICA & PW & $-$4.61 & $-$2.83 \\
 
 \paragraph{Disagreement-Routed Cascade details.}
 \label{app:drc}
-DRC invokes NLI only when SC consensus falls below threshold $\tau$, avoiding unnecessary verifier calls on high-agreement problems. Gains concentrate on weak generators (SC $< 40\%$), consistent with the capability-gap hypothesis (\S\ref{sec:cross-arch}). Regime-dependent bottleneck analysis appears in Appendix~\ref{app:2x2}.
+Disagreement-Routed Cascade (DRC) invokes NLI only when SC consensus falls below threshold $\tau$, avoiding unnecessary verifier calls on high-agreement problems. Gains concentrate on weak generators (SC $< 40\%$), consistent with the capability-gap hypothesis (\S\ref{sec:cross-arch}). Regime-dependent bottleneck analysis appears in Appendix~\ref{app:2x2}.
 
 \begin{table}[h]
 \centering
@@ -977,16 +919,9 @@ BART-MNLI & & & \checkmark & \checkmark & \checkmark \\
 \section{Capability Gap Data Points}
 \label{app:capability-gap}
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.78\columnwidth]{figures/capability_gap_scatter}
-\caption{Combo gain vs.\ capability gap (verifier standalone $-$ generator SC) at $w{=}3$ across three NLI architectures. Gain decreases monotonically (Spearman $\rho = 1.0$, exact permutation $p = 0.003$, $n{=}6$; four of six conditions share the DeBERTa verifier---see Limitations); significant gains occur only for generators below the verifier's standalone accuracy. Stars: domain-adapted DeBERTa (99.67\% standalone, Table~\ref{tab:finetuned-nli}).}
-\label{fig:capability-gap}
-\end{figure}
+Figure~\ref{fig:capability-gap} (main text) visualizes the capability-gap pattern. Table~\ref{tab:cross_generator_nli} reports the controlled cross-generator comparison with DeBERTa-large-mnli on ProofWriter ($n{=}600$). We extend this analysis by pairing Mistral-7B with two additional NLI architectures: BART-large-mnli (46.17\% standalone, combo $+5.17$\,pp, $p = 0.0002$) and RoBERTa-large-mnli (37.67\% standalone, combo $+4.17$\,pp, $p = 0.003$). All three NLI architectures produce significant gains on Mistral-7B at $w \geq 3$.
 
-Table~\ref{tab:cross_generator_nli} reports the controlled cross-generator comparison with DeBERTa-large-mnli on ProofWriter ($n{=}600$). We extend this analysis by pairing Mistral-7B with two additional NLI architectures: BART-large-mnli (46.17\% standalone, combo $+5.17$\,pp, $p = 0.0002$) and RoBERTa-large-mnli (37.67\% standalone, combo $+4.17$\,pp, $p = 0.003$). All three NLI architectures produce significant gains on Mistral-7B at $w \geq 3$.
-
-Across all six ProofWriter verifier-generator pairs at $w{=}3$ (three verifiers $\times$ Mistral-7B plus three negative-gap generators $\times$ DeBERTa), combo gain decreases monotonically with the capability gap (Spearman $\rho = 1.0$, exact permutation $p = 0.003$, $n = 6$; however, four of six conditions share the DeBERTa verifier, which may reduce effective degrees of freedom---see Limitations; Figure~\ref{fig:capability-gap}). Significant $w{=}3$ gains are observed only for Mistral-7B (SC 39.33\%, below the verifier); the three above-verifier generators show no significant improvement at any $w$. After BH correction ($m{=}12$), two of twelve conditions survive: Mistral-7B $w{=}3$ (adj.\ $p = 6.78 \times 10^{-5}$) and $w{=}5$ (adj.\ $p = 7.41 \times 10^{-6}$).
+Across all six ProofWriter verifier-generator pairs at $w{=}3$ (three verifiers $\times$ Mistral-7B plus three negative-gap generators $\times$ DeBERTa), combo gain decreases monotonically with the capability gap (Spearman $\rho = 1.0$, exact permutation $p = 0.003$, $n = 6$; however, four of six conditions share the DeBERTa verifier, which may reduce effective degrees of freedom; see Limitations; Figure~\ref{fig:capability-gap}). Significant $w{=}3$ gains are observed only for Mistral-7B (SC 39.33\%, below the verifier); the three above-verifier generators show no significant improvement at any $w$. After BH correction ($m{=}12$), two of twelve conditions survive: Mistral-7B $w{=}3$ (adj.\ $p = 6.78 \times 10^{-5}$) and $w{=}5$ (adj.\ $p = 7.41 \times 10^{-6}$).
 
 \paragraph{Robustness check.} Including all nine conditions (three verifiers $\times$ three weight levels on Mistral-7B) yields Spearman $\rho = 0.836$ (exact permutation $p = 0.007$, $n = 9$), confirming that the monotonic trend is robust to the choice of weight parameter.
 
@@ -1121,7 +1056,7 @@ Generator & $w$ & SC (\%) & Combo (\%) & $\Delta$ (pp) & $p$ \\
 \begin{table}[h]
 \centering
 \small
-\caption{NLI combo on FOLIO ($n{=}204$) with RoBERTa-large-mnli verifier (46.57\% standalone). Cross-verifier consistency: no positive gain reaches significance, and Qwen2.5-14B shows a significant \emph{degradation} at $w{=}5$ ($p{=}.012$)---the same capability-gap signature as BART.}
+\caption{NLI combo on FOLIO ($n{=}204$) with RoBERTa-large-mnli verifier (46.57\% standalone). Cross-verifier consistency: no positive gain reaches significance, and Qwen2.5-14B shows a significant \emph{degradation} at $w{=}5$ ($p{=}.012$), the same capability-gap signature as BART.}
 \label{tab:folio-nli-roberta}
 \setlength{\tabcolsep}{3pt}
 \begin{tabular}{@{}lcccrl@{}}
@@ -1240,7 +1175,7 @@ Generator & $w$ & SC (\%) & Combo (\%) & $\Delta$ (pp) & $p$ \\
 \begin{table}[h]
 \centering
 \small
-\caption{Domain-adapted NLI combo on ProofWriter depth-5 ($n{=}600$). DeBERTa-large fine-tuned on ProofWriter OWA (99.67\% standalone). All $p < 0.0001$. Complementarity: ratio of NLI-correct$\cap$SC-incorrect to SC-correct$\cap$NLI-incorrect.}
+\caption{Domain-adapted NLI combo on ProofWriter depth-5 ($n{=}600$). DeBERTa-large fine-tuned on ProofWriter Open-World Assumption (OWA) (99.67\% standalone). All $p < 0.0001$. Complementarity: ratio of NLI-correct$\cap$SC-incorrect to SC-correct$\cap$NLI-incorrect.}
 \label{tab:finetuned-nli}
 \setlength{\tabcolsep}{3.5pt}
 \begin{tabular}{@{}lrrrrc@{}}
@@ -1266,7 +1201,7 @@ Generator & $w$ & Combo (\%) & $\Delta$ (pp) & Compl.\ ratio \\
 \begin{table}[h]
 \centering
 \small
-\caption{Cross-model voting ablation ($w \in \{3,5\}$). ``Cross LLM'' replaces the NLI verifier with a second LLM's SC votes at weight $w$; ``NLI'' uses DeBERTa-large-mnli (55.00\% standalone) at $w{=}3$. On ProofWriter, cross-model SC with a weak voter (Mistral-7B) degrades all strong generators---worsening at higher $w$---while NLI combo does not, indicating that structural independence---not merely model diversity---drives the escape.}
+\caption{Cross-model voting ablation ($w \in \{3,5\}$). ``Cross LLM'' replaces the NLI verifier with a second LLM's SC votes at weight $w$; ``NLI'' uses DeBERTa-large-mnli (55.00\% standalone) at $w{=}3$. On ProofWriter, cross-model SC with a weak voter (Mistral-7B) degrades all strong generators (worsening at higher $w$), while NLI combo does not, indicating that structural independence, not merely model diversity, drives the escape.}
 \label{tab:cross-model-ablation}
 \setlength{\tabcolsep}{3pt}
 \resizebox{\columnwidth}{!}{%
@@ -1330,7 +1265,7 @@ Generator & Voter/Verifier & $w$ & SC (\%) & Combo (\%) & $\Delta$ (pp) & $p$ \\
 \paragraph{Generator$\times$Extractor 2$\times$2 Matrix.}
 \label{app:2x2}
 
-Table~\ref{tab:2x2-folio} reports the full $2{\times}2$ generator${\times}$extractor matrix on FOLIO ($n{=}204$). The generator dominates accuracy (row difference ${\sim}25$\,pp vs.\ column difference ${\sim}3$\,pp), contrasting with ProofWriter where the extractor dominates ($\Delta$ range ${\pm}40$--$50$\,pp). Cross-extractor McNemar tests: Mistral-7B gen, $\Delta = +2.94$\,pp, $p = 0.143$ (n.s.); Qwen3-14B gen, $\Delta = +2.94$\,pp, $p = 0.021$ (statistically significant but practically small: 6/204 problems changed). The identical net $\Delta$ is coincidental---the two generators have different discordant-pair distributions that happen to yield the same net advantage. BR $> 1$ in all eight cells across both datasets (range $1.94$--$2.70$), confirming SCB universality under cross-model extraction.
+Table~\ref{tab:2x2-folio} reports the full $2{\times}2$ generator${\times}$extractor matrix on FOLIO ($n{=}204$). The generator dominates accuracy (row difference ${\sim}25$\,pp vs.\ column difference ${\sim}3$\,pp), contrasting with ProofWriter where the extractor dominates ($\Delta$ range ${\pm}40$--$50$\,pp). Cross-extractor McNemar tests: Mistral-7B gen, $\Delta = +2.94$\,pp, $p = 0.143$ (n.s.); Qwen3-14B gen, $\Delta = +2.94$\,pp, $p = 0.021$ (statistically significant but practically small: 6/204 problems changed). The identical net $\Delta$ is coincidental; the two generators have different discordant-pair distributions that happen to yield the same net advantage. BR $> 1$ in all eight cells across both datasets (range $1.94$--$2.70$), confirming SCB universality under cross-model extraction.
 
 \begin{table}[h]
 \centering
@@ -1459,10 +1394,10 @@ Mean $\pm$ SD & 85.25 $\pm$ 0.57 & 86.17 $\pm$ 0.59 & $+$0.92 $\pm$ 1.14 \\
 \bottomrule
 \end{tabular}}
 \vspace{2pt}
-{\footnotesize \textsuperscript{a}Original baseline (exp033) used no fixed seed and is excluded from seed statistics.}
+{\footnotesize \textsuperscript{a}Original baseline used no fixed seed and is excluded from seed statistics.}
 \end{table}
 
-On ProofWriter, all twelve Mistral-7B, LLaMA-8B, and Qwen2.5-14B seeds yield negative $\Delta$ (range $-0.83$ to $-7.50$\,pp), with all LLaMA-8B McNemar tests reaching $p < .001$. The results reveal a capability-dependent gradient: LLaMA-8B $\Delta{=}-6.25$ $\to$ Mistral-7B $\Delta{=}-2.29$ $\to$ Qwen2.5-14B $\Delta{=}-1.71$ $\to$ Qwen3-14B $\Delta{=}+0.92$\,pp. Qwen3-14B is the sole exception: its 4-seed mean $\Delta$ is slightly positive ($+0.92 \pm 1.14$\,pp, all n.s.), reflecting the capability-modulated pattern discussed in \S\ref{sec:discussion}---models with SC baselines above 85\% leave few correctable errors for SICA to exploit. The consistency across seeds confirms that the sign of $\Delta$ on ProofWriter is not an artifact of any single random sample but reflects model-level reasoning capacity.
+On ProofWriter, all twelve Mistral-7B, LLaMA-8B, and Qwen2.5-14B seeds yield negative $\Delta$ (range $-0.83$ to $-7.50$\,pp), with all LLaMA-8B McNemar tests reaching $p < .001$. The results reveal a capability-dependent gradient: LLaMA-8B $\Delta{=}-6.25$ $\to$ Mistral-7B $\Delta{=}-2.29$ $\to$ Qwen2.5-14B $\Delta{=}-1.71$ $\to$ Qwen3-14B $\Delta{=}+0.92$\,pp. Qwen3-14B is the sole exception: its 4-seed mean $\Delta$ is slightly positive ($+0.92 \pm 1.14$\,pp, all n.s.; 95\% CI includes zero), reflecting the capability-modulated pattern discussed in \S\ref{sec:discussion}: models with SC baselines above 85\% leave few correctable errors for SICA to exploit. The consistency across seeds confirms that the sign of $\Delta$ on ProofWriter is not an artifact of any single random sample but reflects model-level reasoning capacity. SC ties are broken alphabetically; across 2{,}400 ProofWriter problems ($4 \times 600$), zero SC--SICA answer differences were attributable to tiebreaking, confirming that ties are too rare at $\kappa \approx 0.78$ to affect $\Delta$.
 
 \subsection{Sub-population Analysis}
 \label{app:subpopulation}
@@ -1527,15 +1462,24 @@ Of the 27 training-free remediation strategies (Figure~\ref{fig:interventions-su
 \section{Extended Discussion}
 \label{app:extended-discussion}
 \label{app:limitations-extended}
+\label{app:per-trace-separation}
+
+\paragraph{Per-trace separation analysis.}
+On Mistral-7B FOLIO (166/204 non-unanimous problems), per-trace constraint density is balanced between majority and minority answer groups ($6.0$ vs.\ $5.9$ constraints/trace) and MAX-SAT exclusion rates are comparable ($0.185$ vs.\ $0.172$); the extraction function $f$ produces constraints of equal quality regardless of answer group (\emph{extraction neutrality}).
+The majority of unique formulas (${\sim}$74\%) are minority-exclusive, yet ${\sim}$26\% are shared across answer groups; under source-attribution, shared formulas vote for each side in proportion to trace count, providing zero discriminative signal (\emph{formula undirectedness}). Full semantic direction testing is precluded by variable isolation (56.4\% zero overlap).
+Each constraint votes exclusively for its source trace's answer; volume amplification is ${\approx}1.0\times$. On 82.4\% of problems where the minority vote is correct, SICA still follows the majority (correction rate 17.6\%). SCB is therefore a transparency property: source-attribution scoring faithfully transmits the CoT trace distribution into verification without adding or removing information.
+
+\paragraph{Answer-leakage controls.}
+Two controls rule out answer contamination: (1)~BR is uniform across reasoning steps (Fisher $p = 0.71$); (2)~removing answer sentences before extraction yields no BR decrease (Wilcoxon $p \geq 0.12$) despite accuracy loss (McNemar $p < 0.013$). The bias reflects a distributional prior embedded throughout reasoning.
 
 \paragraph{SCB versus CoT unfaithfulness.}
-SCB is distinct from CoT unfaithfulness \citep{turpin2023language} and CoT-level confirmation bias \citep{wan2025unveiling, jhaveri2026failing}. CoT unfaithfulness concerns whether stated reasoning reflects actual computation; SCB concerns whether \emph{self-extracted formal constraints} mirror the model's answer distribution. Even if traces were perfectly faithful, self-extraction would still inherit the distributional bias---the constraint $P(\text{answer\_A})$ reflects vote share, not logical validity. The shuffle control (\S\ref{sec:confirmation-bias}) confirms this: randomizing constraint--answer associations preserves BR, showing the bias is in the trace-count distribution, not in extraction-specific errors. However, if traces are unfaithful, the mirage may be worse than our measurements suggest, because constraints would reflect not the model's reasoning but its post-hoc rationalization.
+SCB is distinct from CoT unfaithfulness \citep{turpin2023language} and CoT-level confirmation bias \citep{wan2025unveiling, jhaveri2026failing}. CoT unfaithfulness concerns whether stated reasoning reflects actual computation; SCB concerns whether \emph{self-extracted formal constraints} mirror the model's answer distribution. Even if traces were perfectly faithful, self-extraction would still inherit the distributional bias: the constraint $P(\text{answer\_A})$ reflects vote share, not logical validity. The shuffle control (\S\ref{sec:confirmation-bias}) confirms this: randomizing constraint--answer associations preserves BR, showing the bias is in the trace-count distribution, not in extraction-specific errors. However, if traces are unfaithful, the mirage may be worse than our measurements suggest, because constraints would reflect not the model's reasoning but its post-hoc rationalization.
 
 \paragraph{Implications for neuro-symbolic practitioners.}
-Our results do not imply that neuro-symbolic methods are inherently flawed---they imply that \emph{self-extracted} constraints cannot provide independent verification. The key distinction is \emph{when} formalization occurs relative to answer generation. Specification-generation approaches (e.g., SatLM \citep{ye2024satlm}, Logic-LM \citep{pan2023logiclm}) formalize the problem \emph{before} generating candidate answers, avoiding the extraction bottleneck; SatLM's success confirms that the formal verification mechanism is sound when constraints are independently derived. Trace-extraction (this work) operates post-hoc on reasoning traces that already contain candidates, inheriting the distributional prior that generates SCB. When post-hoc verification is unavoidable, practitioners should employ external verifiers from a different architecture family (\S\ref{sec:cross-arch}) and use the diagnostic framework in \S\ref{sec:discussion} to assess feasibility before deployment. The SCB diagnostic toolkit (below) provides detailed computation methods and threshold recommendations.
+Our results do not imply that neuro-symbolic methods are inherently flawed; they imply that \emph{self-extracted} constraints cannot provide independent verification. The key distinction is \emph{when} formalization occurs relative to answer generation. Specification-generation approaches (e.g., SatLM \citep{ye2024satlm}, Logic-LM \citep{pan2023logiclm}) formalize the problem \emph{before} generating candidate answers, avoiding the extraction bottleneck; SatLM's success confirms that the formal verification mechanism is sound when constraints are independently derived. Trace-extraction (this work) operates post-hoc on reasoning traces that already contain candidates, inheriting the distributional prior that generates SCB. When post-hoc verification is unavoidable, practitioners should employ external verifiers from a different architecture family (\S\ref{sec:cross-arch}) and use the diagnostic framework in \S\ref{sec:discussion} to assess feasibility before deployment. The SCB diagnostic toolkit (below) provides detailed computation methods and threshold recommendations.
 
 \paragraph{Test-time scaling implications.}
-Vote diversity decreases with model capability: $K_\text{eff}$ drops from 3.94 (Mistral-7B on ProofWriter) to 1.09 (Qwen3-14B thinking mode). This creates a fundamental tension for o1/R1-style scaling \citep{guo2025deepseekr1}: longer reasoning chains produce more coherent but less diverse traces, reducing the marginal value of additional samples. Our Process-$\kappa$ analysis (\S\ref{sec:process-kappa}) reveals that this homogenization operates at the reasoning-process level, not just answer level---traces that disagree on final answers still share 69\% of their reasoning structure. Cross-architecture ensembles offer a path forward, but the capability-gap condition (\S\ref{sec:cross-arch}) implies that the verifier must be genuinely complementary, not just different.
+Vote diversity decreases with model capability: $K_\text{eff}$ drops from 3.94 (Mistral-7B on ProofWriter) to 1.09 (Qwen3-14B thinking mode). This creates a fundamental tension for o1/R1-style scaling \citep{guo2025deepseekr1}: longer reasoning chains produce more coherent but less diverse traces, reducing the marginal value of additional samples. Our Process-$\kappa$ analysis (\S\ref{sec:process-kappa}) reveals that this homogenization operates at the reasoning-process level, not just answer level; traces that disagree on final answers still share 69\% of their reasoning structure. Cross-architecture ensembles offer a path forward, but the capability-gap condition (\S\ref{sec:cross-arch}) implies that the verifier must be genuinely complementary, not just different.
 
 \paragraph{Semantic evaluation remark.}
 \label{app:semantic-remark}
@@ -1544,9 +1488,9 @@ Since Observation~1 shows SICA reduces to majority vote under degeneration, $\ma
 
 \paragraph{SCB diagnostic toolkit.}
 \label{app:diagnostic-toolkit}
-We recommend four zero-cost diagnostics, computable from sampled traces alone, to predict whether symbolic self-verification will help or hurt before deployment.
+We recommend four lightweight diagnostics, computable from sampled traces alone, to predict whether symbolic self-verification will help or hurt before deployment.
 \emph{Bias Ratio} (BR; \S\ref{sec:confirmation-bias}): for each problem, compute the fraction of constraints supporting the majority answer, divided by majority vote share. $\text{BR} > 1$ indicates constraints are biased toward the majority; $\text{BR} \gg 2$ (as in all nine models tested; Table~\ref{tab:frontier-scb}) signals that extraction amplifies rather than checks the model's prior. Report as mean $\pm$ bootstrap 95\% CI.
-\emph{Effective-K} ($K_\text{eff}$; Eq.~\ref{eq:effk}): compute Fleiss' $\kappa$ across $K$ traces, then $K_\text{eff} = 1 + (K-1)(1-\kappa)$. Threshold: $K_\text{eff} \leq 1.30$ never improves in our experiments---aggregation collapses to majority voting. $K_\text{eff} > 1.8$ is a necessary (not sufficient) condition for gain.
+\emph{Effective-K} ($K_\text{eff}$; Eq.~\ref{eq:effk}): compute Fleiss' $\kappa$ across $K$ traces, then $K_\text{eff} = K / [1 + (K-1)\kappa]$. Threshold: $K_\text{eff} \leq 1.30$ never improves in our experiments; aggregation collapses to majority voting. $K_\text{eff} > 1.8$ is a necessary (not sufficient) condition for gain.
 \emph{Degenerate Consensus} ($C_0$; \S\ref{sec:condorcet}): the fraction of problems where all $K$ traces agree. $C_0 > 95\%$ renders aggregation moot; $C_0 < 5\%$ means the model is maximally uncertain and constraints tend to amplify noise.
 \emph{ProcessSim} (Eq.~\ref{eq:process-sim}): mean pairwise cosine similarity of TF-IDF trace vectors. $\text{ProcessSim} > 0.6$ indicates homogeneous reasoning; combined with $\text{BR} > 2$, this predicts SCB will dominate.
 A practitioner should compute all four on a held-out sample ($n \geq 50$). If $K_\text{eff} \leq 1.30$ or $C_0 > 95\%$ or ($\text{BR} > 2$ and $\text{ProcessSim} > 0.6$), symbolic self-verification is unlikely to help.
@@ -1565,30 +1509,19 @@ Across all tested conditions, $\text{BR}_\text{null} \approx \text{BR}_\text{obs
 
 \paragraph{Future directions: trained extractors and beyond.}
 \label{app:future-directions}
-Our oracle controls reveal that perfect extraction would yield $+29.90$\,pp over SC on Mistral-7B FOLIO---self-extraction captures only ${\sim}12\%$ of this ceiling. This gap motivates several future directions.
-\emph{Trained constraint extractors}: fine-tuning a small model (e.g., encoder-only) on human-annotated FOL from logic benchmarks could produce genuinely discriminative constraints that break the distributional prior. The key design constraint is structural independence---the extractor should not share training data or architecture with the generator, mirroring the cross-architecture NLI escape (\S\ref{sec:cross-arch}).
+Our oracle controls reveal that perfect extraction would yield $+29.90$\,pp over SC on Mistral-7B FOLIO; self-extraction captures only ${\sim}12\%$ of this ceiling. This gap motivates several future directions.
+\emph{Trained constraint extractors}: fine-tuning a small model (e.g., encoder-only) on human-annotated FOL from logic benchmarks could produce genuinely discriminative constraints that break the distributional prior. The key design constraint is structural independence: the extractor should not share training data or architecture with the generator, mirroring the cross-architecture NLI escape (\S\ref{sec:cross-arch}).
 \emph{Multi-model ensembles}: rather than single cross-architecture pairs, combining $M$ structurally independent verifiers could further reduce correlated errors. The capability-gap condition (\S\ref{sec:cross-arch}) predicts that each verifier must exceed the generator on the target task to contribute positively; empirical verification across heterogeneous verifier pools is needed.
 \emph{External knowledge grounding}: connecting to knowledge bases (Wikidata, domain ontologies) could inject verification signal absent from any model's parameters. This avoids SCB entirely by grounding constraints in external facts rather than self-generated traces.
 \emph{SCB-aware aggregation}: current MAX-SAT aggregation treats all constraints equally. Weighting constraints by estimated independence (e.g., inverse ProcessSim with other traces' constraints) or by discriminative power (e.g., cross-validation on held-out traces) could partially mitigate SCB without requiring external verifiers.
 
 \paragraph{SCB as an evaluation framework.}
 \label{app:scb-evaluation}
-The SCB metrics---BR, $K_\text{eff}$, ProcessSim, and CCR---can serve as a general evaluation framework for self-improvement methods beyond SICA. Any method that extracts structured representations from a model's own outputs (self-verification \citep{huang2024selfcorrect}, self-refinement \citep{madaan2023selfrefine}, chain-of-verification \citep{dhuliawala2023chainofverification}, self-consistency \citep{wang2023sc}) faces the distributional prior that generates SCB. We propose that future work on self-improvement methods report: (1)~BR on error cases (does the method's verification signal correlate with the model's majority answer, or does it provide independent information?); (2)~$K_\text{eff}$ or an analogous diversity metric (does the method generate genuinely diverse candidates, or does it amplify a single mode?); (3)~CCR (does the method preferentially correct errors, or does it preferentially confirm them?). A method with $\text{BR} < 1$, high $K_\text{eff}$, and $\text{CCR} > 0$ demonstrates genuine self-improvement; $\text{BR} > 1$ with $\text{CCR} < 0$ indicates that the method suffers from SCB regardless of aggregate accuracy gains, which may reflect favorable base rates rather than corrective signal.
+The SCB metrics (BR, $K_\text{eff}$, ProcessSim, and CCR) can serve as a general evaluation framework for self-improvement methods beyond SICA. Any method that extracts structured representations from a model's own outputs (self-verification \citep{huang2024selfcorrect}, self-refinement \citep{madaan2023selfrefine}, chain-of-verification \citep{dhuliawala2023chainofverification}, self-consistency \citep{wang2023sc}) faces the distributional prior that generates SCB. We propose that future work on self-improvement methods report: (1)~BR on error cases (does the method's verification signal correlate with the model's majority answer, or does it provide independent information?); (2)~$K_\text{eff}$ or an analogous diversity metric (does the method generate genuinely diverse candidates, or does it amplify a single mode?); (3)~CCR (does the method preferentially correct errors, or does it preferentially confirm them?). A method with $\text{BR} < 1$, high $K_\text{eff}$, and $\text{CCR} > 0$ demonstrates genuine self-improvement; $\text{BR} > 1$ with $\text{CCR} < 0$ indicates that the method suffers from SCB regardless of aggregate accuracy gains, which may reflect favorable base rates rather than corrective signal.
 
 \paragraph{Additional scope considerations.}
 
 Beyond the limitations discussed in the main text, several additional constraints bound our conclusions. Seven of our eleven model-domain conditions have $n \leq 60$, providing insufficient statistical power for confirmatory claims; power analysis shows that the minimum detectable effect exceeds 5\,pp for these conditions (Table~\ref{tab:power}), so they serve as regime characterization rather than definitive tests. Our extraction prompts use a single zero-shot template per domain; alternative prompting strategies (few-shot exemplars, chain-of-thought extraction, or iterative refinement) might yield higher-quality constraints, though the oracle gap suggests the bottleneck is structural rather than prompt-specific. The constraint quality analysis (91.8\% discriminative rate, 39.2\% source-trace minority weight) covers Qwen2.5-14B on FOLIO + ProofWriter ($N = 804$); other model-domain combinations may exhibit different characteristics. Constraint extraction uses $T_{\text{ext}} = 0.3$ while trace sampling uses $T = 0.7$; alternative extraction temperatures might yield different results. Although we prompt for first-order logic formalizations, 99.0\% of extracted constraints are propositional at the Z3 level, with only 1.0\% using true quantifiers ($\forall$/$\exists$); whether models capable of genuine quantified reasoning would yield higher discriminative rates is untested. Deduplication uses syntactic equivalence (global average dedup ratio: 46.0\%), so semantically equivalent constraints with different surface forms receive separate weights; Z3-based semantic deduplication removes an additional ${\sim}$10\% of constraints and yields a small but significant improvement over no deduplication ($p = 0.013$), suggesting room for better dedup strategies. The GSM8K pilot ($n = 30$) illustrates the constraint-absent regime and should not be interpreted as confirmatory evidence.
 
-\section{Use of AI Assistants}
-\label{app:ai-assistants}
-
-We used Claude (Anthropic) as an AI coding and writing assistant
-throughout this work. Specifically:
-\begin{itemize}
-    \item \textbf{Code:} drafting experiment scripts, data-processing
-    pipelines, and analysis utilities; debugging and refactoring.
-    \item \textbf{Writing:} drafting and revising paper sections,
-    polishing prose, and reformatting LaTeX.
-    \item \textbf{Literature:} summarizing related papers to inform
-    the related-work section.
-\end{itemize}
+\section{Use of AI Assistance}
+We used Claude for coding, code drafting, debugging, and language polishing.

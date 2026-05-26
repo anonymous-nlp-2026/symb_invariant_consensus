@@ -15,13 +15,14 @@
 \usepackage{multirow}
 \usepackage{xcolor}
 \usepackage{enumitem}
+% pifont removed: no longer used
 \usepackage{subcaption}
-% tikz removed: figures now use external PDF/PNG
+\usepackage{tikz}
+\usetikzlibrary{positioning,shapes.geometric,arrows.meta}
 \usepackage{listings}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
-\usepackage{hyperref}
-% cleveref removed: unused (\Cref/\cref not called)
+% hyperref loaded by acl.sty; cleveref unused
 
 \lstset{
   basicstyle=\small\ttfamily,
@@ -38,7 +39,7 @@
 
 \graphicspath{{../figures/paper/}{figures/}}
 
-\title{Beyond Self-Consistency: Self-Extracted Constraints\\Fail to Improve over Majority Voting under Zero-Shot Extraction}
+\title{Beyond Self-Consistency: Self-Extracted Constraints\\Reduce to Majority Voting under Zero-Shot Extraction}
 
 \author{Anonymous}
 
